@@ -28,7 +28,10 @@ package com.trustedchoice.askkodiak.v2.client;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import feign.*;
+import feign.Feign;
+import feign.Logger;
+import feign.RequestInterceptor;
+import feign.Response;
 import feign.auth.BasicAuthRequestInterceptor;
 import feign.codec.ErrorDecoder;
 import feign.jackson.JacksonDecoder;
@@ -39,20 +42,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class AskKodiakClient {
-
-    static class AskKodiakHeadersInterceptor implements RequestInterceptor {
-
-        private final String authHeader;
-
-        AskKodiakHeadersInterceptor(String groupId, String apiKey) {
-            authHeader = String.format("%s:%s", groupId, apiKey);
-        }
-
-        @Override
-        public void apply(RequestTemplate template) {
-            template.header("Authorization", authHeader);
-        }
-    }
 
     static class AskKodiakErrorDecoder implements ErrorDecoder {
 
