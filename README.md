@@ -1,7 +1,5 @@
 # Ask Kodiak Java SDK
 
-## :warning: This is still in beta, as such, expect changes. :warning:
-
 ## Overview
 
 The Ask Kodiak Java SDK is a straightforward Java implementation of the
@@ -12,9 +10,19 @@ Settings once you've created an account with Ask Kodiak.
 The SDK is implemented with [Feign](https://github.com/OpenFeign/feign).
 
 ## Getting Started
-:construction: At the current time, you'll have to build this yourself,
-however it will be available on Maven central in the future.
-:construction:
+Maven:
+```xml
+<dependency>
+  <groupId>com.trustedchoice</groupId>
+  <artifactId>ask-kodiak-sdk</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+```
+Gradle:
+```groovy
+compile 'com.trustedchoice:ask-kodiak-sdk:1.0.0'
+```
 
 ## Building
 ```bash

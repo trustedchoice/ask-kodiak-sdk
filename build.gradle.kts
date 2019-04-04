@@ -1,7 +1,10 @@
+import com.jfrog.bintray.gradle.BintrayExtension
+
 plugins {
     `java-library`
     `maven-publish`
     id("io.freefair.lombok") version "3.2.0"
+    id("com.jfrog.bintray") version "1.8.4"
 }
 
 group = "com.trustedchoice"
@@ -48,8 +51,56 @@ publishing {
             from(components["java"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
+
+            //Complying with pom requirements for maven central
+            pom {
+                name.set("ask-kodiak-sdk")
+                description.set("The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments.")
+                url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("http://www.opensource.org/licenses/mit-license.php")
+                        distribution.set("repo")
+                    }
+                    developers {
+                        developer {
+                            id.set("aweigold")
+                            name.set("Adam J. Weigold")
+                            email.set("adam.weigold@trustedchoice.com")
+                        }
+                    }
+                    scm {
+                        url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
+                    }
+                }
+            }
         }
     }
+}
+
+//Distributing to maven central via bintray is easier
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+    pkg(closureOf<BintrayExtension.PackageConfig> {
+        repo = "ask-kodiak-sdk"
+        name = "ask-kodiak-sdk"
+        userOrg = "trustedchoice"
+        websiteUrl = "https://github.com/trustedchoice/ask-kodiak-sdk"
+        githubRepo = "trustedchoice/ask-kodiak-sdk"
+        vcsUrl = "https://github.com/trustedchoice/ask-kodiak-sdk"
+        description = "The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments."
+        setLicenses("MIT")
+        desc = description
+        version(closureOf<BintrayExtension.VersionConfig> {
+            name = project.version.toString()
+            gpg(closureOf<BintrayExtension.GpgConfig> {
+                sign = true
+            })
+        })
+    })
+    setPublications("mavenJava")
 }
 
 val jacksonVersion = "2.9.8"
