@@ -23,45 +23,15 @@
  * SOFTWARE.
  */
 
-package com.trustedchoice.askkodiak.v2.model.company;
-
-import java.util.List;
-import java.util.Map;
-
-@lombok.Data
-public class Companies {
-
-    /**
-     * The total count of companies returned by this query.
-     */
-    private Integer count;
-
-    /**
-     * The number of companies in each page of results.
-     */
-    private Integer companiesPerPage;
-
-    /**
-     * The page of results which the response represents.
-     */
-    private Integer page;
-
-    /**
-     * The total number of result pages available.
-     */
-    private Integer pages;
-
-    /**
-     * A map summarizing the filters (if any) applied to the query.
-     */
-    private Map<String, String> filters;
-
-    /**
-     * An array of 0-n companies objects eligible for this code.
-     * <p>
-     * For documentation about the singleton company instances in this array see the documentation for
-     * Company/GetCompany
-     */
-    private List<Company> companies;
-
-}
+/**
+ * The Ask Kodiak REST API has semantic, resource-oriented URLs, and uses HTTP codes to signify API response status. In
+ * addition to standard HTTP response codes, we use features like HTTP authentication and HTTP verbs, so that just about
+ * any HTTP client can be used to interface with the API. JSON is returned by all API responses, even errors.
+ * <p>
+ * Status of the API is available at http://status.askkodiak.com. Use this page to register for email, SMS, webhook, or
+ * RSS notifications whenever Ask Kodiak creates or updates an incident related to the API.
+ * <p>
+ * Follow @askkodiak on Twitter for the latest updates and news on the platform. For more information about Ask Kodiak
+ * visit our website.
+ */
+package com.trustedchoice.askkodiak.v2.client;

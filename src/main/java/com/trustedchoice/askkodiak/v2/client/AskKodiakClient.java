@@ -68,7 +68,7 @@ public class AskKodiakClient {
     }
 
     public static AskKodiak getInstance(String groupId, String apiKey) {
-        return getInstance(groupId, apiKey, null);
+        return getInstance(groupId, apiKey, "https://api.askkodiak.com");
     }
 
     public static AskKodiak getInstance(String groupId, String apiKey, RequestInterceptor... interceptors) {

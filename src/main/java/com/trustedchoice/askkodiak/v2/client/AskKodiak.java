@@ -74,10 +74,10 @@ public interface AskKodiak {
      * although they will be mapped to their 2017 equivalent. The mapped hash will be included in the response payload.
      * The superset of pre-calculated hashes are available from the NAICS/GetCodes interface.</li>
      * </ol>
-     *
+     * <p>
      * The API account acts as a member of your 'staff'. Products available to this user group will be included in
      * results.
-     *
+     * <p>
      * In the event that the code requested is anything other than an MD5 hash of six-digit National Industry code +
      * sub-description, products with any eligibility whatsoever in the requested NAICS group will be included in the
      * response. Each product in the results is extended with a property representing the percentage of codes in the
@@ -90,7 +90,7 @@ public interface AskKodiak {
      * @throws AskKodiakException error
      */
     @RequestLine("GET /v2/products/class-code/naics/{code}")
-    Products eligibleForCode(@Param("code") String code) throws AskKodiakException;
+    Products getProductsEligibleForCode(@Param("code") String code) throws AskKodiakException;
 
     /**
      * Get products eligible a given NAICS code. code can be any valid 2017 NAICS edition:
@@ -110,10 +110,10 @@ public interface AskKodiak {
      * although they will be mapped to their 2017 equivalent. The mapped hash will be included in the response payload.
      * The superset of pre-calculated hashes are available from the NAICS/GetCodes interface.</li>
      * </ol>
-     *
+     * <p>
      * The API account acts as a member of your 'staff'. Products available to this user group will be included in
      * results.
-     *
+     * <p>
      * In the event that the code requested is anything other than an MD5 hash of six-digit National Industry code +
      * sub-description, products with any eligibility whatsoever in the requested NAICS group will be included in the
      * response. Each product in the results is extended with a property representing the percentage of codes in the
@@ -127,11 +127,11 @@ public interface AskKodiak {
      * @throws AskKodiakException error
      */
     @RequestLine("GET /v2/products/class-code/naics/{code}")
-    Products eligibleForCode(@Param("code") String code, @QueryMap EligibleQuery query) throws AskKodiakException;
+    Products getProductsEligibleForCode(@Param("code") String code, @QueryMap EligibleQuery query) throws AskKodiakException;
 
     /**
      * Get products available to your group that are owned by the company represented by the specified group id (gid).
-     *
+     * <p>
      * The API account acts as a member of your 'staff'. Products available to this user group will be included in
      * results. For a comprehensive set of interfaces to acquire your own products regardless of permission, see
      * Admin/Products
@@ -141,11 +141,11 @@ public interface AskKodiak {
      * @throws AskKodiakException error
      */
     @RequestLine("GET /v2/products/company/{gid}")
-    Products forCompany(@Param("gid") String gid) throws AskKodiakException;
+    Products getProductsForCompany(@Param("gid") String gid) throws AskKodiakException;
 
     /**
      * Get products available to your group that are owned by the company represented by the specified group id (gid).
-     *
+     * <p>
      * The API account acts as a member of your 'staff'. Products available to this user group will be included in
      * results. For a comprehensive set of interfaces to acquire your own products regardless of permission, see
      * Admin/Products
@@ -156,7 +156,7 @@ public interface AskKodiak {
      * @throws AskKodiakException error
      */
     @RequestLine("GET /v2/products/company/{gid}")
-    Products forCompany(@Param("gid") String gid, @QueryMap CompanyQuery query) throws AskKodiakException;
+    Products getProductsForCompany(@Param("gid") String gid, @QueryMap CompanyQuery query) throws AskKodiakException;
 
     /////////////////////////
     // Product APIs
@@ -206,22 +206,30 @@ public interface AskKodiak {
      *
      * @param id The id of the product requested.
      * @param code Any one of the following:
+     *             <ul>
+     *             <li>
      *             A NAICS Sector : Generally a 2 digit numeric value, but occasionally a hyphenated range for certain
      *                              sectors. (e.g 11 or 44-45, representing Agriculture, Forestry, Fishing and Hunting
      *                              and Retail Trade respectively). See the NAICS/GetSectors interface for a full list.
+     *             <li>
      *             A NAICS Subsector : A 3 digit numeric NAICS Subsector code (e.g. 531, representing Real Estate)
+     *             <li>
      *             A NAICS National Industry : A 4 digit numeric NAICS National Industry Code (e.g. 3361, representing
      *                                         Motor Vehicle Manufacturing)
+     *             <li>
      *             A NAICS International Industry : A 5 digit NAICS International Industry code (e.g. 11331,
      *                                              representing Logging)
+     *             <li>
      *             A NAICS National Industry : A 6 digit NAICS National Industry code (e.g. 312120, representing
      *                                         Breweries)
+     *             <li>
      *             A NAICS Hash : An MD5 Hash of a six-digit National Industry code and sub-description (e.g.
      *                            03da921f2510c7ab4e47dcd1f9061264, the calculated MD5 hash of 713990Miniature golf
      *                            courses). This is the most precise eligibility request that can be made. Please note,
      *                            valid 2012 NAICS edition hashes will also be accepted, although they will be mapped to
      *                            their 2017 equivalent. The superset of pre-calculated hashes are available from the
      *                            NAICS/GetCodes interface.
+     *             </ul>
      * @return Eligibility response
      * @throws AskKodiakException error
      */
@@ -239,7 +247,7 @@ public interface AskKodiak {
      * Get suggested hashes associated with a search term. Term should be a string, that may describe a business, a
      * NAICS code, or a SIC Code. This interface is designed to be used in a 'suggest' control or search model where the
      * user is attempting to classify a risk.
-     *
+     * <p>
      * This interface provides the highest level of specificity as it pertains to classification of a business. It is
      * recommended for that purpose over lower precision interfaces in this API group.
      *
@@ -254,7 +262,7 @@ public interface AskKodiak {
      * Get suggested hashes associated with a search term. Term should be a string, that may describe a business, a
      * NAICS code, or a SIC Code. This interface is designed to be used in a 'suggest' control or search model where the
      * user is attempting to classify a risk.
-     *
+     * <p>
      * This interface provides the highest level of specificity as it pertains to classification of a business. It is
      * recommended for that purpose over lower precision interfaces in this API group.
      *
@@ -272,7 +280,7 @@ public interface AskKodiak {
      * Get suggested NAICS 2-6 digit groups for a search term. Term can equal a typo-tolerant string, or NAICS code.
      * This interface is designed to be used in a 'suggest' control or search model where the user is attempting to
      * classify a risk.
-     *
+     * <p>
      * This interface will provide suggestions for 2-6 digit NAICS groups. For the highest level of specificity in
      * classification it is recommended that the Suggest/NAICSCodes interface be used.
      *
@@ -287,7 +295,7 @@ public interface AskKodiak {
      * Get suggested NAICS 2-6 digit groups for a search term. Term can equal a typo-tolerant string, or NAICS code.
      * This interface is designed to be used in a 'suggest' control or search model where the user is attempting to
      * classify a risk.
-     *
+     * <p>
      * This interface will provide suggestions for 2-6 digit NAICS groups. For the highest level of specificity in
      * classification it is recommended that the Suggest/NAICSCodes interface be used.
      *
@@ -321,7 +329,7 @@ public interface AskKodiak {
     /**
      * Get the basic information about companies with storefronts on Ask Kodiak, including their name, website, and
      * other descriptive information as available.
-     *
+     * <p>
      * For purposes of this interface the term other includes any non-carrier entity with an Ask Kodiak storefront. This
      * could include MGAs, Program Writers, Aggregators, and etc.
      *
@@ -334,7 +342,7 @@ public interface AskKodiak {
     /**
      * Get the basic information about companies with storefronts on Ask Kodiak, including their name, website, and
      * other descriptive information as available.
-     *
+     * <p>
      * For purposes of this interface the term other includes any non-carrier entity with an Ask Kodiak storefront. This
      * could include MGAs, Program Writers, Aggregators, and etc.
      *
@@ -363,15 +371,15 @@ public interface AskKodiak {
     /**
      * Get all computed NAICS hashes. These are 6 Digit National Industry Codes (the lowest NAICS level) plus the
      * sub-descriptions for the code.
-     *
+     * <p>
      * As an illustrative example 03da921f2510c7ab4e47dcd1f9061264 is the calculated MD5 hash of 713990Miniature golf
      * courses and allows for differentiation between other sub-descriptions, of which 713990 has 58, ranging from golf
      * to hockey, to kayaking.
-     *
+     * <p>
      * As a primary search index, these hashes can be used in subsequent calls to check eligibility for a business
      * description. This list is fairly static and changes only with new releases of NAICS every five years. It is
      * generally safe thusly to cache a copy for best performance.
-     *
+     * <p>
      * For more on NAICS, visit: http://www.census.gov/eos/www/naics/
      *
      * @return A map keyed by hash containing values of all 6-digit NAICS codes plus their descriptions.
@@ -423,7 +431,7 @@ public interface AskKodiak {
          * significantly, especially in those cases where the results include a large number of products. If this parameter
          * is missing, excluded, or set to false eligible classes will not be present on products in the response.
          */
-        Boolean includeEligibility = false;
+        Boolean includeEligibility;
 
         /**
          * Request that only summary information be returned for products in the response including (if available on
@@ -431,7 +439,7 @@ public interface AskKodiak {
          * false all available properties will be present on products in the response. Please Note: in the event that
          * summaryOnly is set to true, the includeEligibility parameter will be forced to false.
          */
-        Boolean summaryOnly = false;
+        Boolean summaryOnly;
 
         /**
          * Filter response to include only products available in requested geography(s) and apply any conditional rules
@@ -660,7 +668,7 @@ public interface AskKodiak {
 
         /**
          * Will cause location specific conditional content to be included for the requested geography(s) if any.
-         *
+         * <p>
          * Use + as separator to include more than one geo code. Usage geos=US-MA or geos=CA-ON+CA-BC. A filter of
          * geos=US-MN+US-HI means Minnesota OR Hawaii.
          */
@@ -668,7 +676,7 @@ public interface AskKodiak {
 
         /**
          * Will cause naics-group-based conditional content to be included for the requested group(s) if any.
-         *
+         * <p>
          * Use + as separator to include more than one naics group. Usage naicsGroups=722514 or
          * naicsGroups=722514+722515.
          */
@@ -676,7 +684,7 @@ public interface AskKodiak {
 
         /**
          * Will cause naics-code-based conditional content to be included for the requested codes(s) if any.
-         *
+         * <p>
          * Use + as separator to include more than one hash. Usage naicsCodes=9d709a5f8cefe02c3ba71bdd3a4c3e28 or
          * naicsCodes=9d709a5f8cefe02c3ba71bdd3a4c3e28+4797cab0bb586ec0a98da773878ef97d.
          */
@@ -698,7 +706,7 @@ public interface AskKodiak {
          * Limit the results to a certain NAICS group type. Use this for example to restrict your search to only 6 digit
          * NAICS National Industry Codes. Valid values are sector, subsector, industry-group, international-industry, or
          * national-industry. If omitted, groups of all types will be present in the results.
-         *
+         * <p>
          * Only available on {@link #getSuggestedNaicsGroups(String, SuggestQuery)}
          */
         String groupType;

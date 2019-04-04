@@ -94,7 +94,7 @@ public class Products {
 
     /**
      * An object summarizing the filters (if any) applied to the initial request.
-     * TODO
+     * TODO: Document this better and/or strongly type this
      */
     private Map<String, Object> filters;
 
@@ -105,7 +105,7 @@ public class Products {
 
     /**
      * An individual product eligible for the requested NAICS code.
-     *
+     * <p>
      * In the event that summaryOnly was set to true on the request, only the name, id, and ownerId properties will be
      * present on products in the results. If summaryOnly is omitted from the request or set to false, complete product
      * objects - rendered in accordance with the governing conditions as expressed by the request filters - will be
@@ -145,7 +145,7 @@ public class Products {
 
     /**
      * An individual product eligible for the requested NAICS code.
-     *
+     * <p>
      * In the event that summaryOnly was set to true on the request, only the name, id, and ownerId properties will be
      * present on products in the results. If summaryOnly is omitted from the request or set to false, complete product
      * objects - rendered in accordance with the governing conditions as expressed by the request filters - will be

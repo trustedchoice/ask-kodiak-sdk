@@ -1,9 +1,11 @@
 plugins {
     `java-library`
+    `maven-publish`
+    id("io.freefair.lombok") version "3.2.0"
 }
 
 group = "com.trustedchoice"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -11,6 +13,43 @@ repositories {
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+lombok {
+    config.put("lombok.addLombokGeneratedAnnotation", "true")
+}
+
+tasks.register<Jar>("sourcesJar") {
+    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+    from(sourceSets.main.get().allJava)
+    archiveClassifier.set("sources")
+}
+
+tasks.register<Jar>("javadocJar") {
+    dependsOn(JavaPlugin.JAVADOC_TASK_NAME)
+    from(tasks["javadoc"])
+    archiveClassifier.set("javadoc")
+}
+
+// add licensing information to all artifacts
+tasks.withType<Jar> {
+    from(project.rootProject.projectDir) {
+        include("LICENSE")
+        into("META-INF")
+    }
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
+        }
+    }
 }
 
 val jacksonVersion = "2.9.8"
