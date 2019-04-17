@@ -100,6 +100,11 @@ public class ProductMetadata {
     private Map<String, Boolean> eligibility;
 
     /**
+     * A list of tags for this product.
+     */
+    private List<Tag> tags;
+
+    /**
      * An object containing data about the level of completeness of this product.
      */
     public Optional<ProductCompleteness> getCompleteness() {
