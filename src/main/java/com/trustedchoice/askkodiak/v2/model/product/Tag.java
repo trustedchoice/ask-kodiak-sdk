@@ -30,8 +30,10 @@ package com.trustedchoice.askkodiak.v2.model.product;
  */
 @lombok.Data
 public class Tag {
+
     /**
      *  Name of the tag
      */
     private String text;
+
 }

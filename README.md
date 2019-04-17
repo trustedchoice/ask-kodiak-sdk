@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Javadocs](http://javadoc.io/badge/com.trustedchoice/ask-kodiak-sdk.svg)](http://javadoc.io/doc/com.trustedchoice/ask-kodiak-sdk)
-[![MavenCentral](http://img.shields.io/badge/Maven_Central-1.0.0-yellow.svg)](https://oss.sonatype.org/content/groups/public/com/trustedchoice/ask-kodiak-sdk/)
+[![MavenCentral](http://img.shields.io/badge/Maven_Central-1.0.1-yellow.svg)](https://oss.sonatype.org/content/groups/public/com/trustedchoice/ask-kodiak-sdk/)
 
 ## Overview
 
@@ -19,13 +19,13 @@ Maven:
 <dependency>
   <groupId>com.trustedchoice</groupId>
   <artifactId>ask-kodiak-sdk</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <type>pom</type>
 </dependency>
 ```
 Gradle:
 ```groovy
-compile 'com.trustedchoice:ask-kodiak-sdk:1.0.0'
+compile 'com.trustedchoice:ask-kodiak-sdk:1.0.1'
 ```
 
 ## Building
