@@ -28,7 +28,7 @@ package com.trustedchoice.askkodiak.v2.model;
 @lombok.Data
 public class Range {
 
-    private Integer max;
+    private Long max;
 
-    private Integer min;
+    private Long min;
 }
