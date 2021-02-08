@@ -158,6 +158,16 @@ public interface AskKodiak {
     @RequestLine("GET /v2/products/company/{gid}")
     Products getProductsForCompany(@Param("gid") String gid, @QueryMap CompanyQuery query) throws AskKodiakException;
 
+    /**
+     * Get all products available to the requesting user that match the request parameters (if any).
+     *
+     * @param query Query parameters
+     * @return User products
+     * @throws AskKodiakException error
+     */
+    @RequestLine("GET /v2/products/user")
+    Products getProductsForUser(@QueryMap UserQuery query) throws AskKodiakException;
+
     /////////////////////////
     // Product APIs
     // https://api.askkodiak.com/doc/v2/#api-Product
@@ -646,6 +656,234 @@ public interface AskKodiak {
          * page=5. If productsPerPage is not specified all products will be included in the results.
          */
         Integer page;
+
+    }
+
+    @lombok.Builder
+    @lombok.Getter
+    @lombok.Setter
+    class UserQuery {
+
+        /**
+         * Filters response to include only products belonging to the requested owner(s). Use + as separator to include
+         * more than company id. Usage owners=ABC123 or owners=ABC123+DEF456. A filter of owners=ABC123+DEF456 means
+         * products owned by group with id ABC123 OR products owned by group with id DEF456.
+         */
+        String owners;
+
+        /**
+         * Filters request to include only products owned by the specified company type. Usage companyType=carrier or
+         * companyType=other.
+         */
+        String companyType;
+
+        /**
+         * Filters request to include only products of with the requested relationship(s) to the searching company.
+         *
+         * Valid values are one of:
+         *
+         * owner - products owned by the company making the request.
+         *
+         * inNetwork - products owned by a company that 'trusts' the company making the request.
+         *
+         * outOfNetwork - products owned by a company that has no relationship with the company making the request.
+         *
+         * Use + as separator to include more than interest level. Usage interestLevels=outOfNetwork or
+         * interestLevels=owner+inNetwork.
+         */
+        String interestLevels;
+
+        /**
+         * Filter response to include only products with eligibility for a specific 2-6 digit NAICS group or groups and
+         * apply any conditional rules which pertain to them. Use + as separator to include more than one naics group.
+         * Usage naicsGroups=722514 or naicsGroups=44-45+722515.
+         */
+        String naicsGroups;
+
+        /**
+         * Filter response to include only products with eligibility for a specific hash or hashes and apply any
+         * conditional rules which pertain to them. Use + as separator to include more than one hash. Usage
+         * naicsCodes=9d709a5f8cefe02c3ba71bdd3a4c3e28 or
+         * naicsCodes=9d709a5f8cefe02c3ba71bdd3a4c3e28+4797cab0bb586ec0a98da773878ef97d.
+         */
+        String naicsCodes;
+
+        /**
+         * Request that eligible hashes be included on products in the response. Potentially increases response payload
+         * significantly, especially in those cases where the results include a large number of products. If this
+         * parameter is missing, excluded, or set to false eligible classes will not be present on products in the
+         * response.
+         */
+        Boolean includeEligibility;
+
+        /**
+         * Request that only summary information be returned for products in the response including (if available on
+         * resultant products) name, ownerId, id, coverageType, and logo. If this parameter is missing, excluded, or set
+         * to false all available properties will be present on products in the response. Please Note: in the event that
+         * summaryOnly is set to true, the includeEligibility parameter will be forced to false.
+         */
+        Boolean summaryOnly;
+
+        /**
+         * Filter response to include only products available in requested geography(s) and apply any conditional rules
+         * which pertain to them. Use + as separator to include more than 1 ISO 3166-2 code. Usage geos=US-HI or
+         * geos=US-MN+CA-ON. A filter of geos=US-MN+US-HI means products available in Minnesota OR Hawaii.
+         */
+        String geos;
+
+        /**
+         * Filter response to include only products matching the requested coverage or coverages. Use + as separator to
+         * include more than 1 product code. Usage productCodes=BOP or productCodes=BOP+WORK. A filter of
+         * productCodes=BOP+WORK means products that have BOP OR Work Comp coverage.
+         */
+        String productCodes;
+
+        /**
+         * Filters response to include only products expressly eligible for a given entity type or types. Use + as
+         * separator to include more than 1 entity type code. Usage entityTypes=AS or entityTypes=AS+CCORP. A filter of
+         * entityTypes=AS+CCORP means include products eligible to either 'Association' or 'C-Corporation' entity types.
+         * A full list of valid entity types can be attained from ReferenceData/BusinessEntityTypes
+         */
+        String entityTypes;
+
+        /**
+         * Filters response to include only products matching the requested tag or tags. Use + as separator to include
+         * more than 1 tag. Usage tags=external-website or tags=external-website+internal-portal. A filter of
+         * tags=external-website+internal-portal+marketABC123 means all products which have either the tag
+         * external-website, internal-portal, or marketABC123.
+         */
+        String tags;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a given annual payroll
+         * amount. Usage annualPayroll=10000000
+         */
+        String annualPayroll;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a given annual revenue
+         * amount. Usage annualRevenue=50000000
+         */
+        String annualRevenue;
+
+        /**
+         * Filters response to include only products in the specified premium range or amount. If specifying a range,
+         * min and max values should be separated with a dash as shown in the example. Usage anticipatedPremium=1000 or
+         * anticipatedPremium=1000-10000.
+         */
+        String anticipatedPremium;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a given number of full time
+         * employees. Usage fullTimeEmployees=100
+         */
+        String fullTimeEmployees;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a given number of part time
+         * employees. Usage partTimeEmployees=24
+         */
+        String partTimeEmployees;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a specific total insured
+         * value (TIV). Usage tiv=1000000
+         */
+        String tiv;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a specific number of
+         * scheduled vehicles. Usage vehicles=10
+         */
+        String vehicles;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a specific number of
+         * scheduled locations. Usage locations=5
+         */
+        String locations;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a specific number of
+         * scheduled buildings. Usage buildings=2
+         */
+        String buildings;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for a specific square footage.
+         * Usage squareFootage=1200
+         */
+        String squareFootage;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for buildings of a specific age
+         * in years. Usage buildingAge=200
+         */
+        String buildingAge;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for entities who have been in
+         * business for a given amount time. Usage yearsInBusiness=5
+         */
+        String yearsInBusiness;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for entities who have a given
+         * amount of operating experience in the industry. Usage yearsInIndustry=10
+         */
+        String yearsInIndustry;
+
+        /**
+         * Request that only admitted products be included. If this parameter is omitted no filter will be applied to
+         * the response with regard to admitted status. Usage admitted=true or admitted=false
+         */
+        Boolean admitted;
+
+        /**
+         * Limit the response to a maximum number of products.
+         */
+        Integer productsPerPage;
+
+        /**
+         * Get specific page of results. Page numbers are zero-based, so to retrieve the 6th page, you should set
+         * page=5. If productsPerPage is not specified all products will be included in the results.
+         */
+        Integer page;
+
+        /**
+         * Limits the query to a subset of products by filtering the response to include only the requested product(s)
+         * in the response. Use + as separator to include more than product id.
+         *
+         * Usage products=a61a1c21df9b4971a1b7e569014d128c or
+         * products=a61a1c21df9b4971a1b7e569014d128c+c22624b9777d47e2914ffa27c733149b.
+         *
+         * A filter of products=a61a1c21df9b4971a1b7e569014d128c+c22624b9777d47e2914ffa27c733149b means only include the
+         * products with the id a61a1c21df9b4971a1b7e569014d128c OR c22624b9777d47e2914ffa27c733149b (i.e. no other
+         * products will be present in the response).
+         */
+        String products;
+
+        /**
+         * Filter response to include only products with eligibility for a specific custom (product owner defined)
+         * classification code and apply conditional rules which pertain to any NAICS codes mapped to the custom code.
+         * Specify classifications as a composite key made up of the taxonomy identifier (tid) to which the code belongs
+         * and the code id (cid) itself delimited by a colon (:).
+         *
+         * As an illustrative example, to filter for only products eligible for bop code 12345 the value would be
+         * bop:12345. More than one classification can be specified. In this event, use + as separator to include more
+         * than on. For example bop:12345+bop:78901+wc:1111.
+         *
+         * Products not explicitly correlated by their owner to the requested taxonomy will not be returned even if they
+         * are eligible for the NAICS code(s) the custom classification code(s) represents. Mappings from the custom
+         * class code to NAICS are defined by the owner of the product.
+         */
+        String classifications;
+
+        /**
+         * Filters response to include only products with expressly stated eligibility for entities who have a given
+         * amount of operating experience in the industry. Usage yearsInIndustry=10
+         */
+        String classificationGroups;
 
     }
 
