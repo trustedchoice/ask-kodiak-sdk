@@ -418,7 +418,7 @@ public interface AskKodiak {
      * @throws AskKodiakException error
      */
     @RequestLine("GET /v2/naics/group/{groupNumber}")
-    NaicsGroup getGroup(@Param("groupNumber") int groupNumber) throws AskKodiakException;
+    NaicsGroup getGroup(@Param("groupNumber") String groupNumber) throws AskKodiakException;
 
     /////////////////////////
     // Products API query models
