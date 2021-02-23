@@ -67,6 +67,16 @@ public class Product {
     private Range annualRevenue;
 
     /**
+     * An object describing the min/max number of scheduled buildings eligible for this product.
+     */
+    private Range buildings;
+
+    /**
+     * An object describing the min/max building age eligible for this product.
+     */
+    private Range buildingAge;
+
+    /**
      * A list of collateral associated with this product. Each individual piece of collateral is represented as an
      * object in the list.
      */
@@ -102,6 +112,11 @@ public class Product {
      * (e.g. "High limits", "Excellent Claims Service", etc.)
      */
     private List<String> highlights;
+
+    /**
+     * An object describing the min/max number of scheduled locations eligible for this product.
+     */
+    private Range locations;
 
     /**
      * Metadata about this product including information like when it was first created, last updated, or last indexed
@@ -153,6 +168,21 @@ public class Product {
      * The typical premium amounts associated with policies written for this product, represented as min and max values.
      */
     private Range premiumSize;
+
+    /**
+     * An object describing the min/max square footage eligible for this product.
+     */
+    private Range squareFootage;
+
+    /**
+     * An object describing the min/max total insured value eligible for this product.
+     */
+    private Range tiv;
+
+    /**
+     * An object describing the min/max number of scheduled vehicles eligible for this product.
+     */
+    private Range vehicles;
 
     /**
      * The unique ID of this product in Ask Kodiak.
@@ -212,6 +242,20 @@ public class Product {
      }
 
     /**
+     * An object describing the min/max number of scheduled buildings eligible for this product.
+     */
+    public Optional<Range> getBuildings() {
+        return Optional.ofNullable(buildings);
+    }
+
+    /**
+     * An object describing the min/max building age eligible for this product.
+     */
+    public Optional<Range> getBuildingAge() {
+        return Optional.ofNullable(buildingAge);
+    }
+
+    /**
      * A list of collateral associated with this product. Each individual piece of collateral is represented as an
      * object in the list.
      */
@@ -261,6 +305,13 @@ public class Product {
     public Optional<List<String>> getHighlights() {
           return Optional.ofNullable(highlights);
      }
+
+    /**
+     * An object describing the min/max number of scheduled locations eligible for this product.
+     */
+    public Optional<Range> getLocations() {
+        return Optional.ofNullable(locations);
+    }
 
     /**
      * Metadata about this product including information like when it was first created, last updated, or last indexed
@@ -330,6 +381,27 @@ public class Product {
     public Optional<Range> getPremiumSize() {
           return Optional.ofNullable(premiumSize);
      }
+
+    /**
+     * An object describing the min/max square footage eligible for this product.
+     */
+    public Optional<Range> getSquareFootage() {
+        return Optional.ofNullable(squareFootage);
+    }
+
+    /**
+     * An object describing the min/max total insured value eligible for this product.
+     */
+    public Optional<Range> getTiv() {
+        return Optional.ofNullable(tiv);
+    }
+
+    /**
+     * An object describing the min/max number of scheduled vehicles eligible for this product.
+     */
+    public Optional<Range> getVehicles() {
+        return Optional.ofNullable(vehicles);
+    }
 
     /**
      * The unique ID of this product in Ask Kodiak.
