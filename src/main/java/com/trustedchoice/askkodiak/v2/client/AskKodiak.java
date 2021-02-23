@@ -420,6 +420,17 @@ public interface AskKodiak {
     @RequestLine("GET /v2/naics/group/{groupNumber}")
     NaicsGroup getGroup(@Param("groupNumber") String groupNumber) throws AskKodiakException;
 
+    /**
+     * Get a list of business entity types for use decoding the coded values associated with a product. These are
+     * updated on occasion, so while it's advised that you cache the results for reference, do make sure and check for
+     * changes every now and again.
+     *
+     * @return A map containing all business entity type key-value pairs.
+     * @throws AskKodiakException error
+     */
+    @RequestLine("GET /v2/ref-data/business-entity-types")
+    Map<String, String> getBusinessEntityTypes() throws AskKodiakException;
+
     /////////////////////////
     // Products API query models
     // https://api.askkodiak.com/doc/v2/#api-Products
