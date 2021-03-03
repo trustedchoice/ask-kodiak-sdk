@@ -421,6 +421,19 @@ public interface AskKodiak {
     NaicsGroup getGroup(@Param("groupNumber") String groupNumber) throws AskKodiakException;
 
     /**
+     * Get a comprehensive list of all valid naics groups of the requested type. A way to quickly get "all the NAICS
+     * sector codes", or "all the naics international industry group numbers" etc.
+     *
+     * @param type The requested group type. One of: sector, subsector, industry-group, international-industry, or
+     *             national-industry
+     * @return An object whose keys are all valid NAICS groups of the requested type. The value of each key is the
+     * title of the group.
+     * @throws AskKodiakException error
+     */
+    @RequestLine("GET /v2/naics/summary/{type}")
+    Map<String, String> getSummaryForGroupType(@Param("type") String type) throws AskKodiakException;
+
+    /**
      * Get a list of business entity types for use decoding the coded values associated with a product. These are
      * updated on occasion, so while it's advised that you cache the results for reference, do make sure and check for
      * changes every now and again.
