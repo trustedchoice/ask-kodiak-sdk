@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,70 +28,36 @@ package com.trustedchoice.askkodiak.v2.model.product;
 import java.util.Optional;
 
 /**
- * A singleton wholesaler member of the wholesalers object.
+ * An Ask Kodiak eligible object.
  */
 @lombok.Data
-public class Wholesaler {
+public class Eligibility {
+    /**
+     * A restatement of the product id to which this response applies.
+     */
+    private String id;
 
     /**
-     * The name of the wholesaler
+     * Conditions (e.g. class, geography, etc) which have been contemplated in coming to a determination of eligibility.
      */
-    private String company;
+    private Filters filters;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * A true/false indication if the product is eligible given the combination of conditions specified in the initial request.
      */
-    private String contact;
+    private Boolean eligible;
 
     /**
-     * A URL for this wholesaler
+     * Conditions (e.g. class, geography, etc) which have been contemplated in coming to a determination of eligibility.
      */
-    private String url;
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    private String phone;
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<Filters> getFilters() {
+        return Optional.ofNullable(filters);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * A true/false indication if the product is eligible given the combination of conditions specified in the initial request.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    public Optional<Boolean> getEligible() {
+        return Optional.ofNullable(eligible);
     }
-
-    /**
-     * A URL for this wholesaler
-     */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
-    }
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }

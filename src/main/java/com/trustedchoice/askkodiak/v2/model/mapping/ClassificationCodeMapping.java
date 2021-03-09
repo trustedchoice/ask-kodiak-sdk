@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,75 +23,48 @@
  * SOFTWARE.
  */
 
-package com.trustedchoice.askkodiak.v2.model.product;
+package com.trustedchoice.askkodiak.v2.model.mapping;
 
 import java.util.Optional;
 
 /**
- * A singleton wholesaler member of the wholesalers object.
+ * A SIC match for the NAICS
  */
 @lombok.Data
-public class Wholesaler {
+public class ClassificationCodeMapping {
+    /**
+     * The owner-specified identifer for the code.
+     */
+    private String id;
 
     /**
-     * The name of the wholesaler
+     * The title of the classification code.
      */
-    private String company;
+    private String title;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * A user-oriented longer form description of the code.
      */
-    private String contact;
+    private String description;
 
     /**
-     * A URL for this wholesaler
+     * The owner-specified identifer for the code.
      */
-    private String url;
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    private String phone;
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<String> getId() {
+        return Optional.ofNullable(id);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The title of the classification code.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    public Optional<String> getTitle() {
+        return Optional.ofNullable(title);
     }
 
     /**
-     * A URL for this wholesaler
+     * A user-oriented longer form description of the code.
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }

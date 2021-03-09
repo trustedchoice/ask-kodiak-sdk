@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,75 +23,61 @@
  * SOFTWARE.
  */
 
-package com.trustedchoice.askkodiak.v2.model.product;
+package com.trustedchoice.askkodiak.v2.model.referral;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * A singleton wholesaler member of the wholesalers object.
+ * Data about the referral as an object.
  */
 @lombok.Data
-public class Wholesaler {
-
+public class Referral {
     /**
-     * The name of the wholesaler
+     * An object documenting the properties of the query string on the source url (if any) at the time of the referral.
      */
-    private String company;
+    private Map<String, String> search;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The URL from which the referral took place.
      */
-    private String contact;
+    private String source;
 
     /**
-     * A URL for this wholesaler
+     * The URL to which the referral was directed.
      */
     private String url;
 
     /**
-     * A phone number for this wholesaler.
+     * Data about the user who was referred from Ask Kodiak to the referral URL
      */
-    private String phone;
+    private User user;
 
     /**
-     * A URL to a logo for this wholesaler
+     * An object documenting the properties of the query string on the source url (if any) at the time of the referral.
      */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<Map<String, String>> getSearch() {
+        return Optional.ofNullable(search);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The URL from which the referral took place.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    public Optional<String> getSource() {
+        return Optional.ofNullable(source);
     }
 
     /**
-     * A URL for this wholesaler
+     * The URL to which the referral was directed.
      */
     public Optional<String> getUrl() {
         return Optional.ofNullable(url);
     }
 
     /**
-     * A phone number for this wholesaler.
+     * Data about the user who was referred from Ask Kodiak to the referral URL
      */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
+    public Optional<User> getUser() {
+        return Optional.ofNullable(user);
     }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }

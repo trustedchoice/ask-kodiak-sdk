@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,73 +25,50 @@
 
 package com.trustedchoice.askkodiak.v2.model.product;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
 import java.util.Optional;
 
-/**
- * A singleton wholesaler member of the wholesalers object.
- */
 @lombok.Data
-public class Wholesaler {
+public class ConditionalContent {
+    /**
+     * Conditional content resolved for this particular request based on geographies passed in the request.
+     */
+    private Map<String, Rule> geos;
 
     /**
-     * The name of the wholesaler
+     * Conditional content based on 2-6 digit NAICS groups specified in the request.
      */
-    private String company;
+    @JsonProperty("naics-groups")
+    private Map<String, Rule> naicsGroups;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * Conditional content based on NAICS hashes specified in the request.
      */
-    private String contact;
+    @JsonProperty("naics-codes")
+    private Map<String, Rule> naicsCodes;
 
     /**
-     * A URL for this wholesaler
+     * Conditional content resolved for this particular request based on geographies passed in the request.
      */
-    private String url;
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    private String phone;
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<Map<String, Rule>> getGeos() {
+        return Optional.ofNullable(geos);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * Conditional content based on 2-6 digit NAICS groups specified in the request.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    @JsonProperty("naics-groups")
+    public Optional<Map<String, Rule>> getNaicsGroups() {
+        return Optional.ofNullable(naicsGroups);
     }
 
     /**
-     * A URL for this wholesaler
+     * Conditional content based on NAICS hashes specified in the request.
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
+    @JsonProperty("naics-codes")
+    public Optional<Map<String, Rule>> getNaicsCodes() {
+        return Optional.ofNullable(naicsCodes);
     }
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }
