@@ -59,7 +59,6 @@ public class ConditionalContent {
     /**
      * Conditional content based on 2-6 digit NAICS groups specified in the request.
      */
-    @JsonProperty("naics-groups")
     public Optional<Map<String, Rule>> getNaicsGroups() {
         return Optional.ofNullable(naicsGroups);
     }
@@ -67,7 +66,6 @@ public class ConditionalContent {
     /**
      * Conditional content based on NAICS hashes specified in the request.
      */
-    @JsonProperty("naics-codes")
     public Optional<Map<String, Rule>> getNaicsCodes() {
         return Optional.ofNullable(naicsCodes);
     }
