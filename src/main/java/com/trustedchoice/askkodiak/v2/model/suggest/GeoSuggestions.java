@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,75 +23,49 @@
  * SOFTWARE.
  */
 
-package com.trustedchoice.askkodiak.v2.model.product;
+package com.trustedchoice.askkodiak.v2.model.suggest;
 
-import java.util.Optional;
+import java.util.List;
 
-/**
- * A singleton wholesaler member of the wholesalers object.
- */
 @lombok.Data
-public class Wholesaler {
+public class GeoSuggestions {
+    /**
+     * The total number of hits matching the query.
+     */
+    private Integer nbHits;
 
     /**
-     * The name of the wholesaler
+     * The page of results which the response represents.
      */
-    private String company;
+    private Integer page;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The total number of result pages available.
      */
-    private String contact;
+    private Integer nbPages;
 
     /**
-     * A URL for this wholesaler
+     * The number of hits in each page of product results.
      */
-    private String url;
+    private Integer hitsPerPage;
 
     /**
-     * A phone number for this wholesaler.
+     * A restatement of the search query.
      */
-    private String phone;
+    private String query;
 
     /**
-     * A URL to a logo for this wholesaler
+     * The amount of time, in milliseconds, which the request took to process.
      */
-    private String logo;
+    private Long processingTimeMS;
 
     /**
-     * The name of the wholesaler
+     * A boolean indicating if the nbHits count was exhaustive or approximate.
      */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
-    }
+    private Boolean exhaustiveNbHits;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * An array of potential matches (hits) for the search string
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
-    }
-
-    /**
-     * A URL for this wholesaler
-     */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
-    }
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
+    private List<GeoSuggestion> hits;
 }

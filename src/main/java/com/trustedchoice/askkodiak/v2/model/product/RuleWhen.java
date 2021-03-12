@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,73 +25,50 @@
 
 package com.trustedchoice.askkodiak.v2.model.product;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
- * A singleton wholesaler member of the wholesalers object.
+ * Triggering conditions for a rule.
  */
-@lombok.Data
-public class Wholesaler {
+public class RuleWhen {
+    /**
+     * A list of ISO 3166-2 codes which cause this rule to trigger.
+     */
+    private List<String> geos;
 
     /**
-     * The name of the wholesaler
+     * A list of naics hashes which cause this rule to trigger.
      */
-    private String company;
+    @JsonProperty("naics-codes")
+    private List<String> naicsCodes;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * A list of 2-6 digit naics groups which cause this rule to trigger.
      */
-    private String contact;
+    @JsonProperty("naics-groups")
+    private List<String> naicsGroups;
 
     /**
-     * A URL for this wholesaler
+     * A list of ISO 3166-2 codes which cause this rule to trigger.
      */
-    private String url;
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    private String phone;
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<List<String>> getGeos() {
+        return Optional.ofNullable(geos);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * A list of naics hashes which cause this rule to trigger.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    public Optional<List<String>> getNaicsCodes() {
+        return Optional.ofNullable(naicsCodes);
     }
 
     /**
-     * A URL for this wholesaler
+     * A list of 2-6 digit naics groups which cause this rule to trigger.
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
+    public Optional<List<String>> getNaicsGroups() {
+        return Optional.ofNullable(naicsGroups);
     }
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,75 +23,48 @@
  * SOFTWARE.
  */
 
-package com.trustedchoice.askkodiak.v2.model.product;
+package com.trustedchoice.askkodiak.v2.model.mapping;
 
 import java.util.Optional;
 
 /**
- * A singleton wholesaler member of the wholesalers object.
+ * A SIC match for the NAICS
  */
 @lombok.Data
-public class Wholesaler {
+public class NaicsMapping {
+    /**
+     * The description of the NAICS code
+     */
+    private String description;
 
     /**
-     * The name of the wholesaler
+     * The numeric code value of the NAICS code
      */
-    private String company;
+    private Integer code;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The High-Definition NAICS identifier (hash) of the mapping
      */
-    private String contact;
+    private Integer id;
 
     /**
-     * A URL for this wholesaler
+     * The description of the NAICS code
      */
-    private String url;
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    private String phone;
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The numeric code value of the NAICS code
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    public Optional<Integer> getCode() {
+        return Optional.ofNullable(code);
     }
 
     /**
-     * A URL for this wholesaler
+     * The High-Definition NAICS identifier (hash) of the mapping
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
+    public Optional<Integer> getId() {
+        return Optional.ofNullable(id);
     }
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }

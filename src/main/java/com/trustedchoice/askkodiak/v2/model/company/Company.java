@@ -26,6 +26,7 @@
 package com.trustedchoice.askkodiak.v2.model.company;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,18 +41,18 @@ public class Company {
 
     /**
      * The unique group id (gid) of this company on Ask Kodiak.
-    */
+     */
     private String id;
 
     /**
      * A description of the company as authored by them.
-    */
+     */
     private String description;
 
     /**
      * Timestamp of when this company joined Ask Kodiak.
      */
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT, pattern="s")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT, pattern = "s")
     private Timestamp joined;
 
     /**
@@ -108,6 +109,50 @@ public class Company {
      * A shorthand nickname for the company, used in it's Ask Kodiak URL.
      */
     private String shortname;
+
+    /**
+     * The URL of the storefront of the company on Ask Kodiak if it has one.
+     */
+    private String storefrontURL;
+
+    /**
+     * The number of products in the products response for this company.
+     */
+    @JsonProperty("_numEligible")
+    private Integer numEligible;
+
+    /**
+     * The number of products in the products response for this company that were able to be categorized in a defined
+     * productGrouping.
+     */
+    @JsonProperty("_numEligibleGrouped")
+    private Integer numEligibleGrouped;
+
+    /**
+     * The number of products in the products response for this company that were not able to be categorized in a
+     * defined productGrouping.
+     */
+    @JsonProperty("_numEligibleNotGrouped")
+    private Integer numEligibleNotGrouped;
+
+    /**
+     * The total number of products in the products response array.
+     */
+    @JsonProperty("_numProducts")
+    private Integer numProducts;
+
+    /**
+     * The cumulative score of all products for this company returned in the response.
+     */
+    @JsonProperty("_score")
+    private Integer score;
+
+    /**
+     * An indicator if this is a "Virtual" company created to represent a subset of products maintained in your own Ask
+     * Kodiak account.
+     */
+    @JsonProperty("_virtual")
+    private Boolean virtual;
 
     /**
      * The unique group id (gid) of this company on Ask Kodiak.
@@ -205,6 +250,58 @@ public class Company {
      */
     public Optional<String> getShortname() {
         return Optional.ofNullable(shortname);
+    }
+
+    /**
+     * The URL of the storefront of the company on Ask Kodiak if it has one.
+     */
+    public Optional<String> getStorefrontURL() {
+        return Optional.ofNullable(storefrontURL);
+    }
+
+    /**
+     * The number of products in the products response for this company.
+     */
+    public Optional<Integer> getNumEligible() {
+        return Optional.ofNullable(numEligible);
+    }
+
+    /**
+     * The number of products in the products response for this company that were able to be categorized in a defined
+     * productGrouping.
+     */
+    public Optional<Integer> getNumEligibleGrouped() {
+        return Optional.ofNullable(numEligibleGrouped);
+    }
+
+    /**
+     * The number of products in the products response for this company that were not able to be categorized in a
+     * defined productGrouping.
+     */
+    public Optional<Integer> getNumEligibleNotGrouped() {
+        return Optional.ofNullable(numEligibleNotGrouped);
+    }
+
+    /**
+     * The total number of products in the products response array.
+     */
+    public Optional<Integer> getNumProducts() {
+        return Optional.ofNullable(numProducts);
+    }
+
+    /**
+     * The cumulative score of all products for this company returned in the response.
+     */
+    public Optional<Integer> getScore() {
+        return Optional.ofNullable(score);
+    }
+
+    /**
+     * An indicator if this is a "Virtual" company created to represent a subset of products maintained in your own Ask
+     * Kodiak account.
+     */
+    public Optional<Boolean> getVirtual() {
+        return Optional.ofNullable(virtual);
     }
 
 }

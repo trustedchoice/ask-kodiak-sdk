@@ -158,6 +158,11 @@ public class Product {
     private String ownerId;
 
     /**
+     * The URL of the owners logo.
+     */
+    private String ownerLogo;
+
+    /**
      * The Ask Kodiak group type of the owner. Will be one of carrier or agency.
      *
      * Not configured as an enum for forward compatibility.
@@ -194,6 +199,30 @@ public class Product {
      * hashes.
      */
     private Map<String, Boolean> eligibility;
+
+    /**
+     * URL to a logo for this product.
+     */
+    private String logo;
+
+    /**
+     * Tags, if any, which apply to this product under the request conditions. Object keys are the string value of the
+     * tag.
+     */
+    private List<Tag> tags;
+
+    /**
+     * An indicator that the product is eligible for the given request.
+     */
+    @JsonProperty("_eligible")
+    private Boolean eligible;
+
+    /**
+     * A numeric measure of the product's relevance to the specific conditions of the request and overall level of
+     * quality and completeness.
+     */
+    @JsonProperty("_score")
+    private Integer score;
 
     /**
      * A map describing the eligibility profile of the product for any naicsGroups specified in the initial query. Keys
@@ -367,6 +396,13 @@ public class Product {
      }
 
     /**
+     * The URL of the owners logo.
+     */
+    public Optional<String> getOwnerLogo() {
+        return Optional.ofNullable(ownerLogo);
+    }
+
+    /**
      * The Ask Kodiak group type of the owner. Will be one of carrier or agency.
      *
      * Not configured as an enum for forward compatibility.
@@ -426,5 +462,35 @@ public class Product {
     public Optional<Map<String, Float>> getEligibilityForGroupFilters() {
           return Optional.ofNullable(eligibilityForGroupFilters);
      }
+
+    /**
+     * URL to a logo for this product.
+     */
+    public Optional<String> getLogo() {
+        return Optional.ofNullable(logo);
+    }
+
+    /**
+     * An indicator that the product is eligible for the given request.
+     */
+    public Optional<Boolean> getEligible() {
+        return Optional.ofNullable(eligible);
+    }
+
+    /**
+     * A numeric measure of the product's relevance to the specific conditions of the request and overall level of
+     * quality and completeness.
+     */
+    public Optional<Integer> getScore() {
+        return Optional.ofNullable(score);
+    }
+
+    /**
+     * Tags, if any, which apply to this product under the request conditions. Object keys are the string value of the
+     * tag.
+     */
+    public Optional<List<Tag>> getTags() {
+        return Optional.ofNullable(tags);
+    }
 
 }

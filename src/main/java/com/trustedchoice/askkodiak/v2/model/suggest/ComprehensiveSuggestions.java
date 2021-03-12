@@ -23,75 +23,51 @@
  * SOFTWARE.
  */
 
-package com.trustedchoice.askkodiak.v2.model.product;
+package com.trustedchoice.askkodiak.v2.model.suggest;
 
-import java.util.Optional;
+import java.util.List;
 
-/**
- * A singleton wholesaler member of the wholesalers object.
- */
 @lombok.Data
-public class Wholesaler {
+public class ComprehensiveSuggestions {
 
     /**
-     * The name of the wholesaler
+     * The total number of hits matching the query.
      */
-    private String company;
+    private Integer nbHits;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The page of results which the response represents.
      */
-    private String contact;
+    private Integer page;
 
     /**
-     * A URL for this wholesaler
+     * The total number of result pages available.
      */
-    private String url;
+    private Integer nbPages;
 
     /**
-     * A phone number for this wholesaler.
+     * The number of hits in each page of product results.
      */
-    private String phone;
+    private Integer hitsPerPage;
 
     /**
-     * A URL to a logo for this wholesaler
+     * A restatement of the search query.
      */
-    private String logo;
+    private String query;
 
     /**
-     * The name of the wholesaler
+     * The amount of time, in milliseconds, which the request took to process.
      */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
-    }
+    private Long processingTimeMS;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * A boolean indicating if the nbHits count was exhaustive or approximate.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
-    }
+    private Boolean exhaustiveNbHits;
 
     /**
-     * A URL for this wholesaler
+     * An array of potential matches (hits) for the search string
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
-    }
-
-    /**
-     * A phone number for this wholesaler.
-     */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
+    private List<ComprehensiveSuggestion> hits;
 
 }

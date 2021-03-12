@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,73 +25,59 @@
 
 package com.trustedchoice.askkodiak.v2.model.product;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
- * A singleton wholesaler member of the wholesalers object.
+ * Items that a rule includes if any.
  */
 @lombok.Data
-public class Wholesaler {
+public class RuleInclude {
+    /**
+     * Highlights that this rule includes if any.
+     */
+    private List<String> highlights;
 
     /**
-     * The name of the wholesaler
+     * Guidelines that this rule includes if any.
      */
-    private String company;
+    private List<String> guidelines;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * Notes that this rule includes if any.
      */
-    private String contact;
+    private List<String> notes;
 
     /**
-     * A URL for this wholesaler
+     * Collateral that this rule includes if any.
      */
-    private String url;
+    private List<Collateral> collateral;
 
     /**
-     * A phone number for this wholesaler.
+     * Highlights that this rule includes if any.
      */
-    private String phone;
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<List<String>> getHighlights() {
+        return Optional.ofNullable(highlights);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * Guidelines that this rule includes if any.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    public Optional<List<String>> getGuidelines() {
+        return Optional.ofNullable(guidelines);
     }
 
     /**
-     * A URL for this wholesaler
+     * Notes that this rule includes if any.
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
+    public Optional<List<String>> getNotes() {
+        return Optional.ofNullable(notes);
     }
 
     /**
-     * A phone number for this wholesaler.
+     * Collateral that this rule includes if any.
      */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
+    public Optional<List<Collateral>> getCollateral() {
+        return Optional.ofNullable(collateral);
     }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }

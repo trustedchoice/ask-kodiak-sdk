@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,75 +23,64 @@
  * SOFTWARE.
  */
 
-package com.trustedchoice.askkodiak.v2.model.product;
+package com.trustedchoice.askkodiak.v2.model.mapping;
 
-import java.util.Optional;
+import java.util.List;
 
-/**
- * A singleton wholesaler member of the wholesalers object.
- */
 @lombok.Data
-public class Wholesaler {
-
+public class NaicsMappings {
     /**
-     * The name of the wholesaler
+     * A text description of the SIC identifier provided on the request
      */
-    private String company;
+    private String title;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * A text description of the SIC identifier provided on the request
      */
-    private String contact;
+    private Integer code;
 
     /**
-     * A URL for this wholesaler
+     * A URL at which more information about the SIC code can be found
      */
     private String url;
 
     /**
-     * A phone number for this wholesaler.
+     * The industry group number to which the request SIC belongs
      */
-    private String phone;
+    private Integer industryGroupCode;
 
     /**
-     * A URL to a logo for this wholesaler
+     * The title of the industry group to which the request SIC belongs
      */
-    private String logo;
+    private String industryGroupTitle;
 
     /**
-     * The name of the wholesaler
+     * The major group number to which the request SIC belongs
      */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
-    }
+    private Integer majorGroupCode;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * The title of the major group to which the request SIC belongs
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
-    }
+    private String majorGroupTitle;
 
     /**
-     * A URL for this wholesaler
+     * The division code to which the string belongs
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
-    }
+    private String divisionCode;
 
     /**
-     * A phone number for this wholesaler.
+     * The title of the division to which the request SIC belongs
      */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
-    }
+    private String divisionTitle;
 
     /**
-     * A URL to a logo for this wholesaler
+     * The number of NAICS mappings matched to the requested SIC
      */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
+    private Integer count;
 
-
+    /**
+     * A list of NAICS objects which map to the requested SIC
+     */
+    private List<NaicsMapping> mappings;
 }

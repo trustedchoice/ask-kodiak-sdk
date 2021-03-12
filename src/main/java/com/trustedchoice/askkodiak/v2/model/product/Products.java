@@ -33,6 +33,11 @@ import java.util.Optional;
 public class Products {
 
     /**
+     * The name of the company for which the request was made.
+     */
+    private String name;
+
+    /**
      * A restatement of the class code hash requested.
      * Present if the request was made using an MD5 hash of 6 digit national industry code and description. In the event
      * a valid 2012 NAICS edition hash was submitted, it has been mapped to it's 2017 equivalent, and the 2017 hash

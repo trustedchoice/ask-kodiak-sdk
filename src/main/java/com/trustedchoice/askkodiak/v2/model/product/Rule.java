@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Consumer Agent Portal, LLC (TrustedChoice.com)
+ * Copyright (c) 2021 Consumer Agent Portal, LLC (TrustedChoice.com)
  *                    Superkick Ventures, LLC (Ask Kodiak)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,73 +25,62 @@
 
 package com.trustedchoice.askkodiak.v2.model.product;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * A singleton wholesaler member of the wholesalers object.
+ * An individual conditional rule.
  */
 @lombok.Data
-public class Wholesaler {
+public class Rule {
+    /**
+     * The id's of conditional rules triggered by this request. Useful for debugging.
+     */
+    @JsonProperty("_triggered-by")
+    private Map<String, Boolean> triggeredBy;
 
     /**
-     * The name of the wholesaler
+     * Items that this rule includes if any.
      */
-    private String company;
+    private RuleInclude include;
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * Items that this rule exclude if any.
      */
-    private String contact;
+    private RuleExclude exclude;
 
     /**
-     * A URL for this wholesaler
+     * Triggering conditions for the rule.
      */
-    private String url;
+    private RuleWhen when;
 
     /**
-     * A phone number for this wholesaler.
+     * The id's of conditional rules triggered by this request. Useful for debugging.
      */
-    private String phone;
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    private String logo;
-
-    /**
-     * The name of the wholesaler
-     */
-    public Optional<String> getCompany() {
-        return Optional.ofNullable(company);
+    public Optional<Map<String, Boolean>> getTriggeredBy() {
+        return Optional.ofNullable(triggeredBy);
     }
 
     /**
-     * The name of an individual contact at the wholesaler.
+     * Items that this rule includes if any.
      */
-    public Optional<String> getContact() {
-        return Optional.ofNullable(contact);
+    public Optional<RuleInclude> getInclude() {
+        return Optional.ofNullable(include);
     }
 
     /**
-     * A URL for this wholesaler
+     * Items that this rule exclude if any.
      */
-    public Optional<String> getUrl() {
-        return Optional.ofNullable(url);
+    public Optional<RuleExclude> getExclude() {
+        return Optional.ofNullable(exclude);
     }
 
     /**
-     * A phone number for this wholesaler.
+     * Triggering conditions for the rule.
      */
-    public Optional<String> getPhone() {
-        return Optional.ofNullable(phone);
+    public Optional<RuleWhen> getWhen() {
+        return Optional.ofNullable(when);
     }
-
-    /**
-     * A URL to a logo for this wholesaler
-     */
-    public Optional<String> getLogo() {
-        return Optional.ofNullable(logo);
-    }
-
-
 }
