@@ -209,7 +209,7 @@ public class Product {
      * Tags, if any, which apply to this product under the request conditions. Object keys are the string value of the
      * tag.
      */
-    private Tag tags;
+    private Map<String, Boolean> tags;
 
     /**
      * An indicator that the product is eligible for the given request.
@@ -489,7 +489,7 @@ public class Product {
      * Tags, if any, which apply to this product under the request conditions. Object keys are the string value of the
      * tag.
      */
-    public Optional<Tag> getTags() {
+    public Optional<Map<String, Boolean>> getTags() {
         return Optional.ofNullable(tags);
     }
 
