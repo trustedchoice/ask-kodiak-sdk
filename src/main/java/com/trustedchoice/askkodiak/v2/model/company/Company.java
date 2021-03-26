@@ -83,7 +83,7 @@ public class Company {
     /**
      * Preferred colors and theme properties for this company.
      */
-    private Map<String, String> theme;
+    private Map<String, Object> theme;
 
     /**
      * The main URL associated with this company.
@@ -213,7 +213,7 @@ public class Company {
     /**
      * Preferred colors and theme properties for this company.
      */
-    public Optional<Map<String, String>> getTheme() {
+    public Optional<Map<String, Object>> getTheme() {
         return Optional.ofNullable(theme);
     }
 
