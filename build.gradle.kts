@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.trustedchoice"
-version = "3.0.2"
+version = "3.0.3"
 
 repositories {
     mavenCentral()
@@ -104,7 +104,7 @@ bintray {
 }
 
 val jacksonVersion = "2.9.8"
-val feignVersion = "10.2.0"
+val feignVersion = "11.1"
 val slf4jVersion = "1.7.26"
 
 dependencies {

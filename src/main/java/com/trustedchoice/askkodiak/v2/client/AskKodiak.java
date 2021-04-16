@@ -43,8 +43,11 @@ import feign.Headers;
 import feign.Param;
 import feign.QueryMap;
 import feign.RequestLine;
+import feign.template.UriUtils;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The Ask Kodiak REST API has semantic, resource-oriented URLs, and uses HTTP codes to signify API response status. In
@@ -139,8 +142,84 @@ public interface AskKodiak {
      * @return Eligible products
      * @throws AskKodiakException error
      */
+    default Products getProductsEligibleForCode(@Param("code") String code, @QueryMap EligibleQuery query) throws AskKodiakException {
+
+        Map<String, Object> queryParameters = new HashMap<>();
+
+        queryParameters.put("owners", query.getOwners());
+        queryParameters.put("companyType", query.getCompanyType());
+        queryParameters.put("interestLevels", query.getInterestLevels());
+        queryParameters.put("includeEligibility", query.getIncludeEligibility());
+        queryParameters.put("summaryOnly", query.getSummaryOnly());
+        queryParameters.put("productsPerPage", query.getProductsPerPage());
+        queryParameters.put("page", query.getPage());
+        queryParameters.put("geos", query.getGeos());
+        queryParameters.put("productCodes", query.getProductCodes());
+        queryParameters.put("entityTypes", query.getEntityTypes());
+        queryParameters.put("tags", query.getTags());
+        queryParameters.put("annualPayroll", query.getAnnualPayroll());
+        queryParameters.put("annualRevenue", query.getAnnualRevenue());
+        queryParameters.put("anticipatedPremium", query.getAnticipatedPremium());
+        queryParameters.put("fullTimeEmployees", query.getFullTimeEmployees());
+        queryParameters.put("partTimeEmployees", query.getPartTimeEmployees());
+        queryParameters.put("tiv", query.getTiv());
+        queryParameters.put("vehicles", query.getVehicles());
+        queryParameters.put("locations", query.getLocations());
+        queryParameters.put("buildings", query.getBuildings());
+        queryParameters.put("squareFootage", query.getSquareFootage());
+        queryParameters.put("buildingAge", query.getBuildingAge());
+        queryParameters.put("yearsInBusiness", query.getYearsInBusiness());
+        queryParameters.put("yearsInIndustry", query.getYearsInIndustry());
+        queryParameters.put("admitted", query.getAdmitted());
+        queryParameters.put("products", query.getProducts());
+
+        Map<String, Object> queryMap =
+            queryParameters.entrySet()
+                .stream()
+                .filter(e -> e.getValue() != null)
+                .peek(e -> UriUtils.encode(e.getValue().toString()))
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toString().replace("%2B", "+")));
+
+        return getProductsEligibleForCode(code, queryMap);
+
+    }
+
+    /**
+     * Get products eligible a given NAICS code. code can be any valid 2017 NAICS edition:
+     * <ol>
+     * <li>Sector : A NAICS Sector Code. Generally a 2 digit numeric value, but occasionally a hyphenated range for
+     * certain sectors. (e.g '11' or '44-45', representing Agriculture, Forestry, Fishing and Hunting and Retail Trade
+     * respectively). See the NAICS/GetSectors interface for a full list.</li>
+     * <li>Subsector : A 3 digit numeric NAICS Subsector code (e.g. '531', representing Real Estate)</li>
+     * <li>National Industry : A 4 digit numeric NAICS National Industry Code (e.g. '3361', representing Motor Vehicle
+     * Manufacturing)</li>
+     * <li>International Industry : A 5 digit NAICS International Industry code (e.g. '11331', representing
+     * Logging)</li>
+     * <li>National Industry : A 6 digit NAICS National Industry code (e.g. '312120', representing Breweries)</li>
+     * <li>Hash : An MD5 Hash of a six-digit National Industry code and sub-description (e.g.
+     * '03da921f2510c7ab4e47dcd1f9061264', the calculated MD5 hash of 713990Miniature golf courses). This is the most
+     * precise eligibility request that can be made. Please note, valid 2012 NAICS edition hashes will also be accepted,
+     * although they will be mapped to their 2017 equivalent. The mapped hash will be included in the response payload.
+     * The superset of pre-calculated hashes are available from the NAICS/GetCodes interface.</li>
+     * </ol>
+     * <p>
+     * The API account acts as a member of your 'staff'. Products available to this user group will be included in
+     * results.
+     * <p>
+     * In the event that the code requested is anything other than an MD5 hash of six-digit National Industry code +
+     * sub-description, products with any eligibility whatsoever in the requested NAICS group will be included in the
+     * response. Each product in the results is extended with a property representing the percentage of codes in the
+     * requested group for which the product is eligible.
+     *
+     * @param code  Any valid 2017 NAICS Code (at any level of the NAICS hierarchy) or MD5 Hash (6 Digit NAICS National
+     *              Industry Code + Sub-Description). See above for a more detailed description of possible values.
+     *              Conditional rules which pertain to the specified code will be applied to the results.
+     * @param query Query parameters
+     * @return Eligible products
+     * @throws AskKodiakException error
+     */
     @RequestLine("GET /v2/products/class-code/naics/{code}")
-    Products getProductsEligibleForCode(@Param("code") String code, @QueryMap EligibleQuery query) throws AskKodiakException;
+    Products getProductsEligibleForCode(@Param("code") String code, @QueryMap(encoded = true) Map<String, Object> query) throws AskKodiakException;
 
     /**
      * Get products available to your group that are owned by the company represented by the specified group id (gid).
