@@ -163,7 +163,7 @@ public interface AskKodiak {
      * results. For a comprehensive set of interfaces to acquire your own products regardless of permission, see
      * Admin/Products
      *
-     * @param gid The group id of the company on Ask Kodiak.
+     * @param gid   The group id of the company on Ask Kodiak.
      * @param query Query parameters
      * @return Company products
      * @throws AskKodiakException error
@@ -221,8 +221,8 @@ public interface AskKodiak {
      *
      * @param taxonomyId A valid taxonomy identifier. Valid identifiers are not longer than 32 characters and are
      *                   alphanumeric but can also include underscores and hyphens.
-     * @param codeId A valid classification code identifier. Valid identifiers are not longer than 32 characters and are
-     *               alphanumeric but can also include underscores and hyphens.
+     * @param codeId     A valid classification code identifier. Valid identifiers are not longer than 32 characters and are
+     *                   alphanumeric but can also include underscores and hyphens.
      * @return Products object
      * @throws AskKodiakException error
      */
@@ -337,7 +337,7 @@ public interface AskKodiak {
      * @return The groups of the requested type that the product is eligible for.
      * @throws AskKodiakException error
      */
-    @RequestLine("GET /v2/product/{id}/eligibility-by-naics-type/{type}")
+    @RequestLine("GET /v2/product/{id}/eligibility-by-naics-type/{type}?naicsEdition=2022")
     Map<String, NaicsEligibility> getEligibilityByNaicsType(
             @Param("id") String id,
             @Param("type") String type) throws AskKodiakException;
@@ -548,7 +548,7 @@ public interface AskKodiak {
      * designed to be used in a 'suggest' control or search model where the user is attempting to describe a risk
      * location.
      *
-     * @param term Geo suggestions object
+     * @param term  Geo suggestions object
      * @param query Query parameters
      * @return Suggested geos
      * @throws AskKodiakException error
@@ -782,7 +782,7 @@ public interface AskKodiak {
      * title of the group.
      * @throws AskKodiakException error
      */
-    @RequestLine("GET /v2/naics/summary/{type}")
+    @RequestLine("GET /v2/naics/summary/{type}?naicsEdition=2022")
     Map<String, String> getSummaryForGroupType(@Param("type") String type) throws AskKodiakException;
 
     /**
@@ -908,8 +908,8 @@ public interface AskKodiak {
     /**
      * Get details for the requested custom classification group.
      *
-     * @param ownerId The group id of the company on Ask Kodiak to which the requested taxonomy belongs.
-     * @param taxonomyId The identifier of the taxonomy to which the requested classification group belongs.
+     * @param ownerId               The group id of the company on Ask Kodiak to which the requested taxonomy belongs.
+     * @param taxonomyId            The identifier of the taxonomy to which the requested classification group belongs.
      * @param classificationGroupId The identifier of the classification group for which detail should be returned.
      * @return Classification group object
      * @throws AskKodiakException error
@@ -923,8 +923,8 @@ public interface AskKodiak {
     /**
      * Get a list of the classification codes that belong to a classification group in a taxonomy.
      *
-     * @param ownerId The group id of the company on Ask Kodiak to which the requested taxonomy belongs.
-     * @param taxonomyId The identifier of the taxonomy to which the requested classification group belongs.
+     * @param ownerId               The group id of the company on Ask Kodiak to which the requested taxonomy belongs.
+     * @param taxonomyId            The identifier of the taxonomy to which the requested classification group belongs.
      * @param classificationGroupId The identifier of the classification group for which detail should be returned.
      * @return Classification group codes object
      * @throws AskKodiakException error
@@ -938,7 +938,7 @@ public interface AskKodiak {
     /**
      * Get a list of the products available to the user to which a given taxonomy applies.
      *
-     * @param ownerId The group id of the company on Ask Kodiak to which the requested taxonomy belongs.
+     * @param ownerId    The group id of the company on Ask Kodiak to which the requested taxonomy belongs.
      * @param taxonomyId The identifier of the taxonomy to which the requested classification codes belong.
      * @return Taxonomy products object
      * @throws AskKodiakException error
@@ -971,8 +971,8 @@ public interface AskKodiak {
      *
      * @param naics The identifier of the NAICS to be mapped. This value can be any valid 2-6 digit NAICS code or MD5
      *              hash of the national industry code and individual sub-description (NAICS HD).
-     * @param gid The group identifier associated with the owner of the custom taxonomy.
-     * @param tid The identifier of the taxonomy for which mappings should be returned.
+     * @param gid   The group identifier associated with the owner of the custom taxonomy.
+     * @param tid   The identifier of the taxonomy for which mappings should be returned.
      * @return Classification code mappings object
      * @throws AskKodiakException error
      */
@@ -1126,13 +1126,13 @@ public interface AskKodiak {
         /**
          * Filters request to include only products of with the requested relationship(s) to the searching company.
          * Valid values are one of:
-         *
+         * <p>
          * owner - products owned by the company making the request.
-         *
+         * <p>
          * inNetwork - products owned by a company that 'trusts' the company making the request.
-         *
+         * <p>
          * outOfNetwork - products owned by a company that has no relationship with the company making the request.
-         *
+         * <p>
          * Use + as separator to include more than interest level. Usage interestLevels=outOfNetwork or
          * interestLevels=owner+inNetwork.
          */
@@ -2176,7 +2176,7 @@ public interface AskKodiak {
          * In the event that this parameter is specified, products must be explicitly correlated by their owner to the
          * requested taxonomy to be considered to be eligible. In other words if the taxonomy is not linked to the product
          * by the owner it will not be eligible for this request.
-         *
+         * <p>
          * Only available on {@link #getEligibility(String, FilterQuery)} (String, FilterQuery)}
          */
         String classifications;
@@ -2193,7 +2193,7 @@ public interface AskKodiak {
          * In the event that this parameter is specified, products must be explicitly correlated by their owner to the
          * requested taxonomy to be considered to be eligible. In other words if the taxonomy is not linked to the product
          * by the owner it will not be eligible for this request.
-         *
+         * <p>
          * Only available on {@link #getEligibility(String, FilterQuery)}
          */
         String classificationGroups;
@@ -2283,7 +2283,7 @@ public interface AskKodiak {
          * Limit the results to a result type (i.e. only naics-codes). Valid values are naics-code, product-code,
          * business-entity-type, or geo. If omitted, results of all types will be present in the results. Usage:
          * filters=_type:naics-code.
-         *
+         * <p>
          * Only available on {@link #getSuggestedComprehensive(String, SuggestQuery)}
          */
         String filters;
@@ -2531,16 +2531,15 @@ public interface AskKodiak {
         String products;
 
         /**
-         *
          * Filter response to include only products with eligibility for a specific custom (product owner defined)
          * classification code and apply conditional rules which pertain to any NAICS codes mapped to the custom code.
          * Specify classifications as a composite key made up of the taxonomy identifier (tid) to which the code
          * belongs and the code id (cid) itself delimited by a colon (:).
-         *
+         * <p>
          * As an illustrative example, to filter for only products eligible for bop code 12345 the value would be
          * bop:12345. More than one classification can be specified. In this event, use + as separator to include more
          * than on. For example bop:12345+bop:78901+wc:1111.
-         *
+         * <p>
          * Products not explicitly correlated by their owner to the requested taxonomy will not be returned even if
          * they are eligible for the NAICS code(s) the custom classification code(s) represents. Mappings from the
          * custom class code to NAICS are defined by the owner of the product.
@@ -2553,11 +2552,11 @@ public interface AskKodiak {
          * mapped to the custom group. Specify classificationGroups as a composite key made up of the taxonomy
          * identifier (tid) to which the code belongs and the classification group id (cgid) itself delimited by a
          * colon (:).
-         *
+         * <p>
          * As an illustrative example, to filter for only products eligible for bop group retail the value would be
          * bop:retail. More than one classification group can be specified. In this event, use + as separator to
          * include more than on. For example bop:retail+bop:wholesale+wc:office.
-         *
+         * <p>
          * Products not explicitly correlated by their owner to the requested taxonomy will not be returned even if
          * they are eligible for the NAICS groups(s) the custom classification group(s) represents. Mappings from the
          * custom class code to NAICS are defined by the owner of the product.
