@@ -2,7 +2,16 @@ import com.jfrog.bintray.gradle.BintrayExtension
 
 plugins {
     `java-library`
-    `maven-publish`
+    /*
+     * The Maven Publish Plugin provides the ability to publish build artifacts to an Apache Maven repository
+     * Docs: https://docs.gradle.org/current/userguide/publishing_maven.html
+     */
+    id("maven-publish")
+    /*
+     * The Signing Plugin adds the ability to digitally sign built files and artifacts
+     * Docs: https://docs.gradle.org/current/userguide/signing_plugin.html
+     */
+    id("signing")
     id("io.freefair.lombok") version "3.2.0"
     id("com.jfrog.bintray") version "1.8.4"
 }
@@ -45,12 +54,27 @@ tasks.withType<Jar> {
 publishing {
     repositories {
         mavenLocal()
+        maven {
+            name = "SonaTypeOSSRH"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                username = project.findProperty("ossrhUsername") as String
+                password = project.findProperty("ossrhPassword") as String
+            }
+        }
     }
+
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
+
+            if (project.hasProperty("signing.keyId")) {
+                signing {
+                    sign(publishing.publications["mavenJava"])
+                }
+            }
 
             //Complying with pom requirements for maven central
             pom {
@@ -79,29 +103,6 @@ publishing {
     }
 }
 
-//Distributing to maven central via bintray is easier
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
-    pkg(closureOf<BintrayExtension.PackageConfig> {
-        repo = "ask-kodiak-sdk"
-        name = "ask-kodiak-sdk"
-        userOrg = "trustedchoice"
-        websiteUrl = "https://github.com/trustedchoice/ask-kodiak-sdk"
-        githubRepo = "trustedchoice/ask-kodiak-sdk"
-        vcsUrl = "https://github.com/trustedchoice/ask-kodiak-sdk"
-        description = "The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments."
-        setLicenses("MIT")
-        desc = description
-        version(closureOf<BintrayExtension.VersionConfig> {
-            name = project.version.toString()
-            gpg(closureOf<BintrayExtension.GpgConfig> {
-                sign = true
-            })
-        })
-    })
-    setPublications("mavenJava")
-}
 
 val jacksonVersion = "2.9.8"
 val feignVersion = "11.1"
