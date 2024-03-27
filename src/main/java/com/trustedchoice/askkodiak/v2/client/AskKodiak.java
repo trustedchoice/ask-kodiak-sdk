@@ -337,10 +337,28 @@ public interface AskKodiak {
      * @return The groups of the requested type that the product is eligible for.
      * @throws AskKodiakException error
      */
-    @RequestLine("GET /v2/product/{id}/eligibility-by-naics-type/{type}?naicsEdition=2022")
+    @RequestLine("GET /v2/product/{id}/eligibility-by-naics-type/{type}")
     Map<String, NaicsEligibility> getEligibilityByNaicsType(
             @Param("id") String id,
             @Param("type") String type) throws AskKodiakException;
+
+    /**
+     * Get the eligibility of a product at any level (e.g. sector, subsector, industry-group, international-industry, or
+     * national-industry). Returns an object representing which groups of the requested type the product is eligible for
+     * and what percentage of the group is eligible.
+     *
+     * @param id    The id of the product requested.
+     * @param type  Any one of the following: sector, subsector, industry-group, international-industry, or
+     *              national-industry
+     * @param query Query parameters
+     * @return The groups of the requested type that the product is eligible for.
+     * @throws AskKodiakException error
+     */
+    @RequestLine("GET /v2/product/{id}/eligibility-by-naics-type/{type}")
+    Map<String, NaicsEligibility> getEligibilityByNaicsType(
+            @Param("id") String id,
+            @Param("type") String type,
+            @QueryMap NaicsEditionQuery query) throws AskKodiakException;
 
     /**
      * Get the eligibility of a product for any valid 2-6 digit NAICS code or computed NAICS Hash combining 6 digit code
@@ -782,8 +800,24 @@ public interface AskKodiak {
      * title of the group.
      * @throws AskKodiakException error
      */
-    @RequestLine("GET /v2/naics/summary/{type}?naicsEdition=2022")
+    @RequestLine("GET /v2/naics/summary/{type}")
     Map<String, String> getSummaryForGroupType(@Param("type") String type) throws AskKodiakException;
+
+    /**
+     * Get a comprehensive list of all valid naics groups of the requested type. A way to quickly get "all the NAICS
+     * sector codes", or "all the naics international industry group numbers" etc.
+     *
+     * @param type  The requested group type. One of: sector, subsector, industry-group, international-industry, or
+     *              national-industry
+     * @param query Query parameters
+     * @return An object whose keys are all valid NAICS groups of the requested type. The value of each key is the
+     * title of the group.
+     * @throws AskKodiakException error
+     */
+    @RequestLine("GET /v2/naics/summary/{type}")
+    Map<String, String> getSummaryForGroupType(
+            @Param("type") String type,
+            @QueryMap NaicsEditionQuery query) throws AskKodiakException;
 
     /**
      * Get a comprehensive list of all valid naics groups indexed by type (e.g. sector, subsector, industry-group,
@@ -1105,6 +1139,17 @@ public interface AskKodiak {
     // Products API query models
     // https://api.askkodiak.com/doc/v2/#api-Products
     /////////////////////////
+
+    @lombok.Builder
+    @lombok.Getter
+    @lombok.Setter
+    class NaicsEditionQuery {
+        /**
+         * The NAICS edition to which the response should conform. Supported editions are '2012', '2017', or '2022'.
+         * Response will default to the 2017 NAICS edition if no specific edition requested.
+         */
+        String naicsEdition;
+    }
 
     @lombok.Builder
     @lombok.Getter
