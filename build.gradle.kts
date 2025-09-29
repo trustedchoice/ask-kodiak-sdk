@@ -43,13 +43,20 @@ tasks.withType<Jar>().configureEach {
 
 publishing {
     repositories {
+        // Always allow local testing:
         mavenLocal()
-        maven {
-            name = "SonaTypeOSSRH"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            credentials {
-                username = project.findProperty("ossrhUsername") as String
-                password = project.findProperty("ossrhPassword") as String
+
+        // Remote repo (enable only when creds are present)
+        // If you use Sonatype OSSRH, prefer s01 host for newer projects:
+        if (findProperty("ossrhUsername") != null && findProperty("ossrhPassword") != null) {
+            maven {
+                name = "OSSRH"
+                // For older projects you may still be on oss.sonatype.org; adjust as needed.
+                setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+                credentials {
+                    username = findProperty("ossrhUsername") as String
+                    password = findProperty("ossrhPassword") as String
+                }
             }
         }
     }
