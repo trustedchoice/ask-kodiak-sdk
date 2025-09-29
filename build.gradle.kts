@@ -1,13 +1,23 @@
 plugins {
     `java-library`
+    /*
+     * The Maven Publish Plugin provides the ability to publish build artifacts to an Apache Maven repository
+     * Docs: https://docs.gradle.org/current/userguide/publishing_maven.html
+     */
     id("maven-publish")
-    id("signing") // enabled, but will only sign if keys exist
+    /*
+     * The Signing Plugin adds the ability to digitally sign built files and artifacts
+     * Docs: https://docs.gradle.org/current/userguide/signing_plugin.html
+     */
+    id("signing")
 }
 
 group = "com.trustedchoice"
 version = "3.0.5"
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+}
 
 java {
     // Build with JDK 17 toolchain…
@@ -23,7 +33,7 @@ java {
 
 tasks.test { useJUnitPlatform() }
 
-// Add LICENSE into jars
+// add licensing information to all artifacts
 tasks.withType<Jar>().configureEach {
     from(project.rootProject.projectDir) {
         include("LICENSE")
@@ -32,9 +42,29 @@ tasks.withType<Jar>().configureEach {
 }
 
 publishing {
+    repositories {
+        mavenLocal()
+        maven {
+            name = "SonaTypeOSSRH"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                username = project.findProperty("ossrhUsername") as String
+                password = project.findProperty("ossrhPassword") as String
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
+
+            if (project.hasProperty("signing.keyId")) {
+                signing {
+                    sign(publishing.publications["mavenJava"])
+                }
+            }
+
+            //Complying with pom requirements for maven central
             pom {
                 name.set("ask-kodiak-sdk")
                 description.set("The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments.")
@@ -58,6 +88,7 @@ publishing {
         }
     }
 }
+
 val jacksonVersion = "2.9.8"
 val feignVersion = "11.1"
 val slf4jVersion = "1.7.26"
@@ -70,7 +101,6 @@ dependencies {
     api("io.github.openfeign:feign-slf4j:$feignVersion")
     api("org.slf4j:slf4j-api:$slf4jVersion")
 
-    // Lombok via deps (no Freefair plugin)
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     testCompileOnly("org.projectlombok:lombok:1.18.32")
@@ -79,30 +109,4 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.0")
     testImplementation("ch.qos.logback:logback-classic:1.2.3")
-
-    repositories {
-        // Always allow local testing:
-        mavenLocal()
-
-        // Remote repo (enable only when creds are present)
-        // If you use Sonatype OSSRH, prefer s01 host for newer projects:
-        if (findProperty("ossrhUsername") != null && findProperty("ossrhPassword") != null) {
-            maven {
-                name = "OSSRH"
-                // For older projects you may still be on oss.sonatype.org; adjust as needed.
-                setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
-                credentials {
-                    username = findProperty("ossrhUsername") as String
-                    password = findProperty("ossrhPassword") as String
-                }
-            }
-        }
-    }
-}
-
-// Only sign if signing keys are provided (so local dev isn't blocked)
-if (findProperty("signing.keyId") != null) {
-    signing {
-        sign(publishing.publications["mavenJava"])
-    }
 }
