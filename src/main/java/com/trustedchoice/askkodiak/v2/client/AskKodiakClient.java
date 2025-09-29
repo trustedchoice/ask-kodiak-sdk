@@ -28,6 +28,7 @@ package com.trustedchoice.askkodiak.v2.client;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.trustedchoice.askkodiak.v2.interceptor.NaicsEditionRequestInterceptor;
 import com.trustedchoice.askkodiak.v2.interceptor.PlusSignEncodingRequestInterceptor;
 import feign.Feign;
 import feign.Logger;
@@ -91,6 +92,7 @@ public class AskKodiakClient {
         }
         builder.requestInterceptor(new BasicAuthRequestInterceptor(groupId, apiKey));
         builder.requestInterceptor(new PlusSignEncodingRequestInterceptor());
+        builder.requestInterceptor(new NaicsEditionRequestInterceptor("2022"));
 
         builder.logger(new Slf4jLogger(AskKodiak.class));
         builder.logLevel(Logger.Level.FULL);

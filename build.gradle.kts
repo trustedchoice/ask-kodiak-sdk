@@ -1,50 +1,53 @@
-import com.jfrog.bintray.gradle.BintrayExtension
-
 plugins {
     `java-library`
-    /*
-     * The Maven Publish Plugin provides the ability to publish build artifacts to an Apache Maven repository
-     * Docs: https://docs.gradle.org/current/userguide/publishing_maven.html
-     */
     id("maven-publish")
-    /*
-     * The Signing Plugin adds the ability to digitally sign built files and artifacts
-     * Docs: https://docs.gradle.org/current/userguide/signing_plugin.html
-     */
-    id("signing")
-    id("io.freefair.lombok") version "3.2.0"
-    id("com.jfrog.bintray") version "1.8.4"
+    id("signing") // enabled, but will only sign if keys exist
 }
 
 group = "com.trustedchoice"
-version = "3.0.4"
+version = "3.0.5"
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    // Build with JDK 17 toolchain…
+    toolchain { languageVersion.set(JavaLanguageVersion.of(17)) }
+    // …but emit Java 8 bytecode if your consumers are still on 1.8:
+    tasks.withType<JavaCompile>().configureEach {
+        options.release.set(8)
+        options.encoding = "UTF-8"
+    }
+    withSourcesJar()
+    withJavadocJar()
 }
 
-lombok {
-    config.put("lombok.addLombokGeneratedAnnotation", "true")
+val jacksonVersion = "2.9.8"
+val feignVersion = "11.1"
+val slf4jVersion = "1.7.26"
+
+dependencies {
+    api("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+    api("io.github.openfeign:feign-core:$feignVersion")
+    api("io.github.openfeign:feign-jackson:$feignVersion")
+    api("io.github.openfeign:feign-slf4j:$feignVersion")
+    api("org.slf4j:slf4j-api:$slf4jVersion")
+
+    // Lombok via deps (no Freefair plugin)
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
+    testCompileOnly("org.projectlombok:lombok:1.18.32")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.0")
+    testImplementation("ch.qos.logback:logback-classic:1.2.3")
 }
 
-tasks.register<Jar>("sourcesJar") {
-    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
-    from(sourceSets.main.get().allJava)
-    archiveClassifier.set("sources")
-}
+tasks.test { useJUnitPlatform() }
 
-tasks.register<Jar>("javadocJar") {
-    dependsOn(JavaPlugin.JAVADOC_TASK_NAME)
-    from(tasks["javadoc"])
-    archiveClassifier.set("javadoc")
-}
-
-// add licensing information to all artifacts
-tasks.withType<Jar> {
+// Add LICENSE into jars
+tasks.withType<Jar>().configureEach {
     from(project.rootProject.projectDir) {
         include("LICENSE")
         into("META-INF")
@@ -52,34 +55,12 @@ tasks.withType<Jar> {
 }
 
 publishing {
-    repositories {
-        mavenLocal()
-        maven {
-            name = "SonaTypeOSSRH"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            credentials {
-                username = project.findProperty("ossrhUsername") as String
-                password = project.findProperty("ossrhPassword") as String
-            }
-        }
-    }
-
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
-
-            if (project.hasProperty("signing.keyId")) {
-                signing {
-                    sign(publishing.publications["mavenJava"])
-                }
-            }
-
-            //Complying with pom requirements for maven central
             pom {
                 name.set("ask-kodiak-sdk")
-                description.set("The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments.")
+                description.set("Ask Kodiak Java SDK")
                 url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
                 licenses {
                     license {
@@ -87,43 +68,41 @@ publishing {
                         url.set("http://www.opensource.org/licenses/mit-license.php")
                         distribution.set("repo")
                     }
-                    developers {
-                        developer {
-                            id.set("aweigold")
-                            name.set("Adam J. Weigold")
-                            email.set("adam.weigold@trustedchoice.com")
-                        }
+                }
+                developers {
+                    developer {
+                        id.set("aweigold")
+                        name.set("Adam J. Weigold")
+                        email.set("adam.weigold@trustedchoice.com")
                     }
-                    scm {
-                        url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
-                    }
+                }
+                scm { url.set("https://github.com/trustedchoice/ask-kodiak-sdk") }
+            }
+        }
+    }
+    repositories {
+        // Always allow local testing:
+        mavenLocal()
+
+        // Remote repo (enable only when creds are present)
+        // If you use Sonatype OSSRH, prefer s01 host for newer projects:
+        if (findProperty("ossrhUsername") != null && findProperty("ossrhPassword") != null) {
+            maven {
+                name = "OSSRH"
+                // For older projects you may still be on oss.sonatype.org; adjust as needed.
+                setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+                credentials {
+                    username = findProperty("ossrhUsername") as String
+                    password = findProperty("ossrhPassword") as String
                 }
             }
         }
     }
 }
 
-
-val jacksonVersion = "2.9.8"
-val feignVersion = "11.1"
-val slf4jVersion = "1.7.26"
-
-dependencies {
-
-    api("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-
-    api("io.github.openfeign:feign-core:$feignVersion")
-    api("io.github.openfeign:feign-jackson:$feignVersion")
-    api("io.github.openfeign:feign-slf4j:$feignVersion")
-
-    api("org.slf4j:slf4j-api:$slf4jVersion")
-
-    compileOnly("org.projectlombok:lombok:1.18.6")
-    annotationProcessor("org.projectlombok:lombok:1.18.6")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.0")
-
-    testImplementation("ch.qos.logback:logback-classic:1.2.3")
+// Only sign if signing keys are provided (so local dev isn't blocked)
+if (findProperty("signing.keyId") != null) {
+    signing {
+        sign(publishing.publications["mavenJava"])
+    }
 }
