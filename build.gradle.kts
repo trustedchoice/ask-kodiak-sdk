@@ -21,6 +21,43 @@ java {
     withJavadocJar()
 }
 
+tasks.test { useJUnitPlatform() }
+
+// Add LICENSE into jars
+tasks.withType<Jar>().configureEach {
+    from(project.rootProject.projectDir) {
+        include("LICENSE")
+        into("META-INF")
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name.set("ask-kodiak-sdk")
+                description.set("The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments.")
+                url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("http://www.opensource.org/licenses/mit-license.php")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("aweigold")
+                        name.set("Adam J. Weigold")
+                        email.set("adam.weigold@trustedchoice.com")
+                    }
+                }
+                scm { url.set("https://github.com/trustedchoice/ask-kodiak-sdk") }
+            }
+        }
+    }
+}
 val jacksonVersion = "2.9.8"
 val feignVersion = "11.1"
 val slf4jVersion = "1.7.26"
@@ -42,44 +79,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.0")
     testImplementation("ch.qos.logback:logback-classic:1.2.3")
-}
 
-tasks.test { useJUnitPlatform() }
-
-// Add LICENSE into jars
-tasks.withType<Jar>().configureEach {
-    from(project.rootProject.projectDir) {
-        include("LICENSE")
-        into("META-INF")
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            pom {
-                name.set("ask-kodiak-sdk")
-                description.set("Ask Kodiak Java SDK")
-                url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("http://www.opensource.org/licenses/mit-license.php")
-                        distribution.set("repo")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("aweigold")
-                        name.set("Adam J. Weigold")
-                        email.set("adam.weigold@trustedchoice.com")
-                    }
-                }
-                scm { url.set("https://github.com/trustedchoice/ask-kodiak-sdk") }
-            }
-        }
-    }
     repositories {
         // Always allow local testing:
         mavenLocal()
