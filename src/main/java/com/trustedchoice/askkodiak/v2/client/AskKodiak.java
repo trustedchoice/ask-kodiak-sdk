@@ -609,6 +609,25 @@ public interface AskKodiak {
             @Param("term") String term,
             @QueryMap SuggestQuery query) throws AskKodiakException;
 
+
+    /**
+     * Get suggested hashes associated with a search term. Term should be a string, that may describe a business, a
+     * NAICS code, or a SIC Code. This interface is designed to be used in a 'suggest' control or search model where the
+     * user is attempting to classify a risk.
+     * <p>
+     * This interface provides the highest level of specificity as it pertains to classification of a business. It is
+     * recommended for that purpose over lower precision interfaces in this API group.
+     *
+     * @param term  The text to search in the index.
+     * @param query Query parameters
+     * @return Suggested hashes
+     * @throws AskKodiakException error
+     */
+    @RequestLine("GET /v2/suggest/naics-codes/{term}")
+    NaicsCodeSuggestions getSuggestedNaicsCodes(
+            @Param("term") String term,
+            @QueryMap NaicsEditionQuery query) throws AskKodiakException;
+
     /**
      * Get suggested NAICS 2-6 digit groups for a search term. Term can equal a typo-tolerant string, or NAICS code.
      * This interface is designed to be used in a 'suggest' control or search model where the user is attempting to
