@@ -50,7 +50,7 @@ tasks.withType<Jar> {
 
 publishing {
     repositories {
-
+        mavenLocal()
         // Only add OSSRH repo if creds are present
         if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
             maven {
