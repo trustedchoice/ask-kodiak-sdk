@@ -1,5 +1,3 @@
-import com.jfrog.bintray.gradle.BintrayExtension
-
 plugins {
     `java-library`
     /*
@@ -13,11 +11,10 @@ plugins {
      */
     id("signing")
     id("io.freefair.lombok") version "3.2.0"
-    id("com.jfrog.bintray") version "1.8.4"
 }
 
 group = "com.trustedchoice"
-version = "3.0.4"
+version = "3.0.5"
 
 repositories {
     mavenCentral()
@@ -54,12 +51,15 @@ tasks.withType<Jar> {
 publishing {
     repositories {
         mavenLocal()
-        maven {
-            name = "SonaTypeOSSRH"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            credentials {
-                username = project.findProperty("ossrhUsername") as String
-                password = project.findProperty("ossrhPassword") as String
+        // Only add OSSRH repo if creds are present
+        if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
+            maven {
+                name = "SonaTypeOSSRH"
+                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                credentials {
+                    username = project.findProperty("ossrhUsername")?.toString()
+                    password = project.findProperty("ossrhPassword")?.toString()
+                }
             }
         }
     }
