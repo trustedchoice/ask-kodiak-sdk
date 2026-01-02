@@ -51,15 +51,12 @@ tasks.withType<Jar> {
 publishing {
     repositories {
         mavenLocal()
-        // Only add OSSRH repo if creds are present
-        if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
-            maven {
-                name = "SonaTypeOSSRH"
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-                credentials {
-                    username = project.findProperty("ossrhUsername")?.toString()
-                    password = project.findProperty("ossrhPassword")?.toString()
-                }
+        maven {
+            name = "SonaTypeOSSRH"
+            url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2")
+            credentials {
+                username = project.findProperty("ossrhUsername")?.toString()
+                password = project.findProperty("ossrhPassword")?.toString()
             }
         }
     }
