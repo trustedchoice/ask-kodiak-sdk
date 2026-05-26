@@ -12,7 +12,7 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
-    <logger name="com.trustedchoice.askkodiak" level="DEBUG" additivity="false"/>
+    <logger name="com.momentumedge.askkodiak" level="DEBUG" additivity="false"/>
     <logger name="com.fasterxml.jackson" level="DEBUG" additivity="false"/>
 
 </configuration>

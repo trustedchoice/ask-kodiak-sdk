@@ -13,8 +13,8 @@ plugins {
     id("io.freefair.lombok") version "3.2.0"
 }
 
-group = "com.trustedchoice"
-version = "3.0.5"
+group = "com.momentumedge"
+version = "3.0.6"
 
 repositories {
     mavenCentral()
@@ -77,7 +77,7 @@ publishing {
             pom {
                 name.set("ask-kodiak-sdk")
                 description.set("The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments.")
-                url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
+                url.set("https://github.com/momentumedge/ask-kodiak-sdk")
                 licenses {
                     license {
                         name.set("MIT License")
@@ -88,11 +88,11 @@ publishing {
                         developer {
                             id.set("aweigold")
                             name.set("Adam J. Weigold")
-                            email.set("adam.weigold@trustedchoice.com")
+                            email.set("adam.weigold@momentumamp.com")
                         }
                     }
                     scm {
-                        url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
+                        url.set("https://github.com/momentumedge/ask-kodiak-sdk")
                     }
                 }
             }
