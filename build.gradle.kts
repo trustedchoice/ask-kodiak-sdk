@@ -1,20 +1,14 @@
+import java.security.MessageDigest
+
 plugins {
     `java-library`
-    /*
-     * The Maven Publish Plugin provides the ability to publish build artifacts to an Apache Maven repository
-     * Docs: https://docs.gradle.org/current/userguide/publishing_maven.html
-     */
     id("maven-publish")
-    /*
-     * The Signing Plugin adds the ability to digitally sign built files and artifacts
-     * Docs: https://docs.gradle.org/current/userguide/signing_plugin.html
-     */
     id("signing")
-    id("io.freefair.lombok") version "3.2.0"
+    id("io.freefair.lombok") version "8.10.2"
 }
 
-group = "com.trustedchoice"
-version = "3.0.5"
+group = "com.momentumedge"
+version = "3.0.6"
 
 repositories {
     mavenCentral()
@@ -22,10 +16,6 @@ repositories {
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
-}
-
-lombok {
-    config.put("lombok.addLombokGeneratedAnnotation", "true")
 }
 
 tasks.register<Jar>("sourcesJar") {
@@ -51,14 +41,6 @@ tasks.withType<Jar> {
 publishing {
     repositories {
         mavenLocal()
-        maven {
-            name = "SonaTypeOSSRH"
-            url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2")
-            credentials {
-                username = project.findProperty("ossrhUsername")?.toString()
-                password = project.findProperty("ossrhPassword")?.toString()
-            }
-        }
     }
 
     publications {
@@ -67,39 +49,110 @@ publishing {
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
 
-            if (project.hasProperty("signing.keyId")) {
-                signing {
-                    sign(publishing.publications["mavenJava"])
-                }
-            }
-
-            //Complying with pom requirements for maven central
             pom {
                 name.set("ask-kodiak-sdk")
                 description.set("The Ask Kodiak Java SDK is a straightforward Java implementation of the Ask Kodiak API for JVM environments.")
-                url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
+                url.set("https://github.com/momentumedge/ask-kodiak-sdk")
                 licenses {
                     license {
                         name.set("MIT License")
                         url.set("http://www.opensource.org/licenses/mit-license.php")
                         distribution.set("repo")
                     }
-                    developers {
-                        developer {
-                            id.set("aweigold")
-                            name.set("Adam J. Weigold")
-                            email.set("adam.weigold@trustedchoice.com")
-                        }
+                }
+                developers {
+                    developer {
+                        id.set("aweigold")
+                        name.set("Adam J. Weigold")
+                        email.set("adam.weigold@momentumamp.com")
                     }
-                    scm {
-                        url.set("https://github.com/trustedchoice/ask-kodiak-sdk")
-                    }
+                }
+                scm {
+                    url.set("https://github.com/momentumedge/ask-kodiak-sdk")
                 }
             }
         }
     }
 }
 
+signing {
+    sign(publishing.publications["mavenJava"])
+}
+
+// Generates md5 and sha1 checksums for all artifacts that will go into the bundle.
+// Maven Central Portal requires these — it does NOT generate them automatically.
+tasks.register("generateChecksums") {
+    group = "publishing"
+    dependsOn("signMavenJavaPublication")
+
+    doLast {
+        val artifactVersion = project.version.toString()
+        val artifactId = "ask-kodiak-sdk"
+        val libsDir = layout.buildDirectory.dir("libs").get().asFile
+        val pubDir = layout.buildDirectory.dir("publications/mavenJava").get().asFile
+
+        val filesToChecksum = mapOf(
+            libsDir.resolve("$artifactId-$artifactVersion.jar") to null,
+            libsDir.resolve("$artifactId-$artifactVersion-sources.jar") to null,
+            libsDir.resolve("$artifactId-$artifactVersion-javadoc.jar") to null,
+            // POM lives under a different name — checksum files must match its renamed form in the bundle
+            pubDir.resolve("pom-default.xml") to "$artifactId-$artifactVersion.pom",
+        )
+
+        filesToChecksum.forEach { (file, outputBaseName) ->
+            val bytes = file.readBytes()
+            val baseName = outputBaseName ?: file.name
+
+            val md5 = MessageDigest.getInstance("MD5").digest(bytes)
+                .joinToString("") { byte -> "%02x".format(byte) }
+            file.resolveSibling("$baseName.md5").writeText(md5)
+
+            val sha1 = MessageDigest.getInstance("SHA-1").digest(bytes)
+                .joinToString("") { byte -> "%02x".format(byte) }
+            file.resolveSibling("$baseName.sha1").writeText(sha1)
+        }
+    }
+}
+
+// Creates the bundle ZIP required by the Maven Central Portal Publisher API.
+// Upload the output with:
+//   TOKEN=$(echo -n "$ossrhUsername:$ossrhPassword" | base64)
+//   curl --request POST \
+//     --header "Authorization: Bearer $TOKEN" \
+//     --form bundle=@build/bundle/central-portal-bundle.zip \
+//     "https://central.sonatype.com/api/v1/publisher/upload?name=ask-kodiak-sdk-VERSION&publishingType=USER_MANAGED"
+tasks.register<Zip>("createCentralPortalBundle") {
+    group = "publishing"
+    description = "Bundles signed artifacts for upload to Maven Central Portal"
+
+    dependsOn("generateChecksums")
+
+    val artifactVersion = project.version.toString()
+    val artifactGroup = project.group.toString()
+    val artifactId = "ask-kodiak-sdk"
+    val basePath = "${artifactGroup.replace(".", "/")}/$artifactId/$artifactVersion"
+
+    archiveFileName.set("central-portal-bundle.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("bundle"))
+
+    into(basePath) {
+        from(layout.buildDirectory.dir("libs")) {
+            include("*.jar", "*.jar.asc", "*.jar.md5", "*.jar.sha1")
+        }
+        from(layout.buildDirectory.dir("publications/mavenJava")) {
+            include("pom-default.xml")
+            rename { "$artifactId-$artifactVersion.pom" }
+        }
+        from(layout.buildDirectory.dir("publications/mavenJava")) {
+            include("pom-default.xml.asc")
+            rename { "$artifactId-$artifactVersion.pom.asc" }
+        }
+        // POM checksums are written with the renamed basename so they can be included directly
+        from(layout.buildDirectory.dir("publications/mavenJava")) {
+            include("$artifactId-$artifactVersion.pom.md5", "$artifactId-$artifactVersion.pom.sha1")
+        }
+    }
+}
 
 val jacksonVersion = "2.9.8"
 val feignVersion = "11.1"
